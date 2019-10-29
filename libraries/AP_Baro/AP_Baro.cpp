@@ -545,6 +545,9 @@ void AP_Baro::init(void)
                                             std::move(hal.spi->get_device(HAL_INS_MPU60x0_NAME))));
         break;
 
+    case AP_BoardConfig::PX4_BOARD_SFF7:
+        //这里什么都不做，通过 HAL_BARO_PROBE_LIST 的定义查找气压计
+        break;
     case AP_BoardConfig::PX4_BOARD_FMUV5:
     case AP_BoardConfig::PX4_BOARD_FMUV6:
         ADD_BACKEND(AP_Baro_MS56XX::probe(*this,

@@ -724,7 +724,7 @@ void Compass::_probe_external_i2c_compasses(void)
     
     // IST8310 on external and internal bus
     if (AP_BoardConfig::get_board_type() != AP_BoardConfig::PX4_BOARD_FMUV5 &&
-        AP_BoardConfig::get_board_type() != AP_BoardConfig::PX4_BOARD_FMUV6) {
+        AP_BoardConfig::get_board_type() != AP_BoardConfig::PX4_BOARD_FMUV6 && AP_BoardConfig::get_board_type() != AP_BoardConfig::PX4_BOARD_SFF7) {
         enum Rotation default_rotation;
 
         if (AP_BoardConfig::get_board_type() == AP_BoardConfig::PX4_BOARD_AEROFC) {
@@ -800,6 +800,7 @@ void Compass::_detect_backends(void)
     case AP_BoardConfig::PX4_BOARD_PH2SLIM:
     case AP_BoardConfig::PX4_BOARD_PIXHAWK2:
     case AP_BoardConfig::PX4_BOARD_MINDPXV2:
+    case AP_BoardConfig::PX4_BOARD_SFF7:
     case AP_BoardConfig::PX4_BOARD_FMUV5:
     case AP_BoardConfig::PX4_BOARD_FMUV6:
     case AP_BoardConfig::PX4_BOARD_PIXHAWK_PRO:
@@ -809,6 +810,9 @@ void Compass::_detect_backends(void)
             _compass_count == COMPASS_MAX_INSTANCES) {
             return;
         }
+
+         _driver_type_mask.set_default(1U<<DRIVER_LIS3MDL);
+         
         break;
 
     case AP_BoardConfig::PX4_BOARD_PCNC1:
@@ -855,16 +859,21 @@ void Compass::_detect_backends(void)
         ADD_BACKEND(DRIVER_AK09916, AP_Compass_AK09916::probe_ICM20948(0, ROTATION_ROLL_180_YAW_90));
         break;
 
+    case AP_BoardConfig::PX4_BOARD_SFF7:
+    break;
+#ifdef NO_IST8310
+        break;
+#endif
     case AP_BoardConfig::PX4_BOARD_FMUV5:
     case AP_BoardConfig::PX4_BOARD_FMUV6:
-        FOREACH_I2C_EXTERNAL(i) {
-            ADD_BACKEND(DRIVER_IST8310, AP_Compass_IST8310::probe(GET_I2C_DEVICE(i, HAL_COMPASS_IST8310_I2C_ADDR),
-                                                                  true, ROTATION_ROLL_180_YAW_90));
-        }
-        FOREACH_I2C_INTERNAL(i) {
-            ADD_BACKEND(DRIVER_IST8310, AP_Compass_IST8310::probe(GET_I2C_DEVICE(i, HAL_COMPASS_IST8310_I2C_ADDR),
-                                                                  false, ROTATION_ROLL_180_YAW_90));
-        }
+        // FOREACH_I2C_EXTERNAL(i) {
+        //     ADD_BACKEND(DRIVER_IST8310, AP_Compass_IST8310::probe(GET_I2C_DEVICE(i, HAL_COMPASS_IST8310_I2C_ADDR),
+        //                                                           true, ROTATION_ROLL_180_YAW_90));
+        // }
+        // FOREACH_I2C_INTERNAL(i) {
+        //     ADD_BACKEND(DRIVER_IST8310, AP_Compass_IST8310::probe(GET_I2C_DEVICE(i, HAL_COMPASS_IST8310_I2C_ADDR),
+        //                                                           false, ROTATION_ROLL_180_YAW_90));
+        // }
         break;
         
     case AP_BoardConfig::PX4_BOARD_SP01:
