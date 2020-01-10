@@ -62,8 +62,11 @@ const AP_Param::GroupInfo AP_RPM::var_info[] = {
     // @Description: Which pin to use
     // @Values: -1:Disabled,50:PixhawkAUX1,51:PixhawkAUX2,52:PixhawkAUX3,53:PixhawkAUX4,54:PixhawkAUX5,55:PixhawkAUX6
     // @User: Standard
+#if defined(HAL_CHIBIOS_ARCH_PPXV5)
+    AP_GROUPINFO("_PIN",    5, AP_RPM, _pin[0], 50),
+#else
     AP_GROUPINFO("_PIN",    5, AP_RPM, _pin[0], 54),
-    
+#endif
 #if RPM_MAX_INSTANCES > 1
     // @Param: 2_TYPE
     // @DisplayName: Second RPM type

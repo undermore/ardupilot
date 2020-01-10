@@ -546,6 +546,10 @@ void AP_Baro::init(void)
                                             std::move(hal.spi->get_device(HAL_INS_MPU60x0_NAME))));
         break;
 
+    case AP_BoardConfig::PX4_BOARD_PPXV5:
+        //do nothing here, the baro will probe determined by param PROBE_EXT
+        break;
+
     case AP_BoardConfig::PX4_BOARD_FMUV5:
     case AP_BoardConfig::PX4_BOARD_FMUV6:
         ADD_BACKEND(AP_Baro_MS56XX::probe(*this,

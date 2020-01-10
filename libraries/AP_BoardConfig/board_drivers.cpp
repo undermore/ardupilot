@@ -96,6 +96,7 @@ void AP_BoardConfig::board_setup_drivers(void)
     case PX4_BOARD_PX4V1:
     case PX4_BOARD_PIXHAWK:
     case PX4_BOARD_PIXHAWK2:
+    case PX4_BOARD_PPXV5:
     case PX4_BOARD_FMUV5:
     case PX4_BOARD_FMUV6:
     case PX4_BOARD_SP01:
@@ -355,6 +356,9 @@ void AP_BoardConfig::board_autodetect(void)
 #elif defined(CONFIG_ARCH_BOARD_AEROFC_V1)
     state.board_type.set_and_notify(PX4_BOARD_AEROFC);
     hal.console->printf("Detected Aero FC\n");
+#elif defined(HAL_CHIBIOS_ARCH_PPXV5)
+    state.board_type.set_and_notify(PX4_BOARD_PPXV5);
+    hal.console->printf("Detected PPXv5\n");
 #elif defined(HAL_CHIBIOS_ARCH_FMUV5)
     state.board_type.set_and_notify(PX4_BOARD_FMUV5);
     hal.console->printf("Detected FMUv5\n");
