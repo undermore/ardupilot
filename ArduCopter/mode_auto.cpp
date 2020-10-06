@@ -1219,6 +1219,9 @@ void ModeAuto::do_circle(const AP_Mission::Mission_Command& cmd)
 
     if(cmd.content.location.loiter_ccw)
         copter.circle_nav->set_rate(-1.0f * AC_CIRCLE_RATE_DEFAULT);
+    else
+        copter.circle_nav->set_rate(AC_CIRCLE_RATE_DEFAULT);
+    cmd.content.location.loiter_ccw = 0;
     // move to edge of circle (verify_circle) will ensure we begin circling once we reach the edge
     circle_movetoedge_start(circle_center, circle_radius_m/10.0f);
 }
