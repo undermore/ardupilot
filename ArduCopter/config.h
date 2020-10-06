@@ -574,7 +574,7 @@
 #endif
 
 #ifndef YAW_LOOK_AHEAD_MIN_SPEED
- # define YAW_LOOK_AHEAD_MIN_SPEED  100             // minimum ground speed in cm/s required before copter is aimed at ground course
+ # define YAW_LOOK_AHEAD_MIN_SPEED  30             // minimum ground speed in cm/s required before copter is aimed at ground course
 #endif
 
 // Super Simple mode

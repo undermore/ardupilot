@@ -489,6 +489,7 @@ private:
         float descend_start_altitude;
         float descend_max; // centimetres
     } nav_payload_place;
+    int yaw_mode = 0;
 };
 
 #if AUTOTUNE_ENABLED == ENABLED
