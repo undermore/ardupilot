@@ -741,6 +741,7 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
 #else
         // delay at waypoint in seconds (this is for copters???)
         cmd.p1 = packet.param1;
+        cmd.content.yaw.turn_rate_dps = AUTO_SLOW_YAW_SLEW_RATE;
 #endif
     }
         break;
