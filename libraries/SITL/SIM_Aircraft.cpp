@@ -514,7 +514,7 @@ void Aircraft::update_dynamics(const Vector3f &rot_accel)
     // constrain height to the ground
     if (on_ground()) {
         if (!was_on_ground && AP_HAL::millis() - last_ground_contact_ms > 1000) {
-            printf("Hit ground at %f m/s\n", velocity_ef.z);
+            //printf("Hit ground at %f m/s\n", velocity_ef.z);
             last_ground_contact_ms = AP_HAL::millis();
         }
         position.z = -(ground_level + frame_height - home.alt * 0.01f + ground_height_difference());
