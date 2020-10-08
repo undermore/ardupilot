@@ -628,6 +628,7 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
 #else
         // delay at waypoint in seconds (this is for copters???)
         cmd.p1 = packet.param1;
+        cmd.content.yaw.turn_rate_dps = AUTO_SLOW_YAW_SLEW_RATE;
 #endif
     }
         break;
@@ -641,11 +642,14 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
     case MAV_CMD_NAV_LOITER_TURNS:                      // MAV ID: 18
     {
         copy_location = true;
-        uint16_t num_turns = packet.param1;              // param 1 is number of times to circle is held in low p1
-        uint16_t radius_m = fabsf(packet.param3);        // param 3 is radius in meters is held in high p1
+        uint16_t num_turns = packet.param1*10;              // param 1 is number of times to circle is held in low p1
+        uint16_t radius_m = fabsf(packet.param3*10);        // param 3 is radius in meters is held in high p1
+        cmd.content.location.flags.terrain_alt = num_turns > 10;
+        num_turns /= 10;
         cmd.p1 = (radius_m<<8) | (num_turns & 0x00FF);   // store radius in high byte of p1, num turns in low byte of p1
         cmd.content.location.flags.loiter_ccw = (packet.param3 < 0);
         cmd.content.location.flags.loiter_xtrack = (packet.param4 > 0); // 0 to xtrack from center of waypoint, 1 to xtrack from tangent exit location
+        cmd.content.yaw.turn_rate_dps = AUTO_SLOW_YAW_SLEW_RATE;
     }
         break;
 
@@ -1096,6 +1100,7 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         if (cmd.content.location.flags.loiter_ccw) {
             packet.param3 = -packet.param3;
         }
+        packet.param3 /= 10;
         packet.param4 = cmd.content.location.flags.loiter_xtrack; // 0 to xtrack from center of waypoint, 1 to xtrack from tangent exit location
         break;
 

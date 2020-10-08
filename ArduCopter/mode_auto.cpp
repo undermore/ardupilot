@@ -288,8 +288,11 @@ void Copter::ModeAuto::circle_movetoedge_start(const Location_Class &circle_cent
         if (dist_to_center > copter.circle_nav->get_radius() && dist_to_center > 500) {
             auto_yaw.set_mode_to_default(false);
         } else {
-            // vehicle is within circle so hold yaw to avoid spinning as we move to edge of circle
-            auto_yaw.set_mode(AUTO_YAW_HOLD);
+            if(yaw_mode)
+                auto_yaw.set_mode(AUTO_YAW_LOOK_AHEAD);
+            else
+                // vehicle is within circle so hold yaw to avoid spinning as we move to edge of circle
+                auto_yaw.set_mode(AUTO_YAW_HOLD);
         }
     } else {
         circle_start();
@@ -304,6 +307,12 @@ void Copter::ModeAuto::circle_start()
 
     // initialise circle controller
     copter.circle_nav->init(copter.circle_nav->get_center());
+    if (auto_yaw.mode() != AUTO_YAW_ROI) {
+        if(yaw_mode)
+            auto_yaw.set_mode(AUTO_YAW_LOOK_AHEAD);
+        else
+            auto_yaw.set_mode(AUTO_YAW_HOLD);
+    }
 }
 
 // auto_spline_start - initialises waypoint controller to implement flying to a particular destination using the spline controller
@@ -790,7 +799,7 @@ void Copter::ModeAuto::wp_run()
         // get pilot's desired yaw rate
         target_yaw_rate = get_pilot_desired_yaw_rate(channel_yaw->get_control_in());
         if (!is_zero(target_yaw_rate)) {
-            auto_yaw.set_mode(AUTO_YAW_HOLD);
+            auto_yaw.set_mode(AUTO_YAW_LOOK_AT_NEXT_WP);
         }
     }
 
@@ -1212,8 +1221,13 @@ void Copter::ModeAuto::do_circle(const AP_Mission::Mission_Command& cmd)
     // calculate radius
     uint8_t circle_radius_m = HIGHBYTE(cmd.p1); // circle radius held in high byte of p1
 
+    if(cmd.content.location.flags.loiter_ccw)
+        copter.circle_nav->set_rate(-1.0f * AC_CIRCLE_RATE_DEFAULT);
+    else
+        copter.circle_nav->set_rate(AC_CIRCLE_RATE_DEFAULT);
+    yaw_mode = cmd.content.location.flags.terrain_alt;
     // move to edge of circle (verify_circle) will ensure we begin circling once we reach the edge
-    circle_movetoedge_start(circle_center, circle_radius_m);
+    circle_movetoedge_start(circle_center, circle_radius_m/10.0f);
 }
 
 // do_loiter_time - initiate loitering at a point for a given time period

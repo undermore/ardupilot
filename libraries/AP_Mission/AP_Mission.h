@@ -40,6 +40,11 @@
 #define AP_MISSION_OPTIONS_DEFAULT          0       // Do not clear the mission when rebooting
 #define AP_MISSION_MASK_MISSION_CLEAR       (1<<0)  // If set then Clear the mission on boot
 
+#ifndef AUTO_SLOW_YAW_SLEW_RATE
+ # define AUTO_SLOW_YAW_SLEW_RATE    10              // degrees/sec
+#endif
+
+
 /// @class    AP_Mission
 /// @brief    Object managing Mission
 class AP_Mission {

@@ -26,7 +26,8 @@ public:
 
     // get path to custom defaults file for AP_Param
     const char* get_custom_defaults_file() const override {
-        return sitlState->defaults_path;
+        //return sitlState->defaults_path;
+        return "E:/Works/Drone/APM/ardupilot/SITLRuntime/default_params/copter.parm";
     }
 
     uint64_t get_hw_rtc() const override;
