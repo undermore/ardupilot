@@ -41,7 +41,7 @@
 #define AP_MISSION_MASK_MISSION_CLEAR       (1<<0)  // If set then Clear the mission on boot
 
 #ifndef AUTO_SLOW_YAW_SLEW_RATE
- # define AUTO_SLOW_YAW_SLEW_RATE    10              // degrees/sec
+ # define AUTO_SLOW_YAW_SLEW_RATE    5              // degrees/sec
 #endif
 
 
