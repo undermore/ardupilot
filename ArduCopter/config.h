@@ -423,7 +423,7 @@
 // Landing Detector
 //
 #ifndef LAND_DETECTOR_TRIGGER_SEC
- # define LAND_DETECTOR_TRIGGER_SEC         1.0f    // number of seconds to detect a landing
+ # define LAND_DETECTOR_TRIGGER_SEC         0.5f    // number of seconds to detect a landing
 #endif
 #ifndef LAND_DETECTOR_MAYBE_TRIGGER_SEC
  # define LAND_DETECTOR_MAYBE_TRIGGER_SEC   0.2f    // number of seconds that means we might be landed (used to reset horizontal position targets to prevent tipping over)

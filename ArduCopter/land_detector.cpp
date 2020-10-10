@@ -85,7 +85,8 @@ void Copter::update_land_detector()
         }
     }
 
-    set_land_complete_maybe(ap.land_complete || (land_detector_count >= LAND_DETECTOR_MAYBE_TRIGGER_SEC*scheduler.get_loop_rate_hz()));
+    bool b = land_detector_count >= (LAND_DETECTOR_MAYBE_TRIGGER_SEC*scheduler.get_loop_rate_hz());
+    set_land_complete_maybe(ap.land_complete || b);
 }
 
 // set land_complete flag and disarm motors if disarm-on-land is configured
