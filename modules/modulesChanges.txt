@@ -1,0 +1,5 @@
+更改了 mavlink\message_definitions\v1.0\common.xml
+将 MISSION_ITEM 消息的 x y 成员从 float 改为 double 从而保证经纬度有足够的精度
+这会影响
+\build\xxx\libraries\GCS_MAVLink\include\mavlink\v2.0\common\mavlink_msg_mission_item.h
+所以 地面站也要使用相同的 mavlink_msg_mission_item.h

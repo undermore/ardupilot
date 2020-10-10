@@ -212,11 +212,11 @@ void print_latlon(AP_HAL::BetterStream *s, int32_t lat_or_lon)
 }
 
 // return true when lat and lng are within range
-bool check_lat(float lat)
+bool check_lat(double lat)
 {
     return fabsf(lat) <= 90;
 }
-bool check_lng(float lng)
+bool check_lng(double lng)
 {
     return fabsf(lng) <= 180;
 }
