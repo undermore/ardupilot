@@ -644,7 +644,8 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
         copy_location = true;
         uint16_t num_turns = packet.param1*10;              // param 1 is number of times to circle is held in low p1
         uint16_t radius_m = fabsf(packet.param3*10);        // param 3 is radius in meters is held in high p1
-        cmd.content.location.flags.terrain_alt = num_turns > 10;
+        cmd.content.location.flags.unused1 = num_turns > 10;
+        cmd.content.location.flags.unused2 = packet.param1*100 > num_turns*10;
         num_turns /= 10;
         cmd.p1 = (radius_m<<8) | (num_turns & 0x00FF);   // store radius in high byte of p1, num turns in low byte of p1
         cmd.content.location.flags.loiter_ccw = (packet.param3 < 0);

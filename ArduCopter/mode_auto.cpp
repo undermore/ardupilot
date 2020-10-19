@@ -1230,7 +1230,15 @@ void Copter::ModeAuto::do_circle(const AP_Mission::Mission_Command& cmd)
         copter.circle_nav->set_rate(-1.0f * AC_CIRCLE_RATE_DEFAULT);
     else
         copter.circle_nav->set_rate(AC_CIRCLE_RATE_DEFAULT);
-    yaw_mode = cmd.content.location.flags.terrain_alt;
+    yaw_mode = cmd.content.location.flags.unused1;
+    if(cmd.content.location.flags.unused2)
+    {
+        set_next_skip = true;
+        skip_fly_to_edge = false;
+    } else {
+        set_next_skip = false;
+        skip_fly_to_edge = false;
+    }
     // move to edge of circle (verify_circle) will ensure we begin circling once we reach the edge
     circle_movetoedge_start(circle_center, circle_radius_m/10.0f);
 }
@@ -1394,7 +1402,7 @@ void Copter::ModeAuto::do_yaw(const AP_Mission::Mission_Command& cmd)
 void Copter::ModeAuto::do_change_speed(const AP_Mission::Mission_Command& cmd)
 {
     if (cmd.content.speed.target_ms > 0) {
-        copter.wp_nav->set_speed_xy(cmd.content.speed.target_ms * 100.0f);
+        copter.wp_nav->set_speed_xy(cmd.content.speed.target_ms);
     }
 }
 

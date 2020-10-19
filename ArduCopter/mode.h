@@ -417,6 +417,9 @@ private:
         float descend_max; // centimetres
     } nav_payload_place;
 
+    bool skip_fly_to_edge = false; //是否跳过 画圈命令的 fly to edge 过程
+    bool set_next_skip = false; // 是否将 下一个画圈命令的 skip_fly_to_edge 设置为 true
+
 };
 
 #if AUTOTUNE_ENABLED == ENABLED
