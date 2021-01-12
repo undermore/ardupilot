@@ -213,7 +213,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Range: 30 200
     // @Increment: 10
     // @User: Standard
-    GSCALAR(land_speed,             "LAND_SPEED",   LAND_SPEED),
+    GSCALAR(land_speed,             "LAND_SPEED",   12),//LAND_SPEED),
 
     // @Param: LAND_SPEED_HIGH
     // @DisplayName: Land speed high

@@ -31,7 +31,7 @@ const AP_Param::GroupInfo AC_WPNav::var_info[] = {
     // @Range: 10 1000
     // @Increment: 50
     // @User: Standard
-    AP_GROUPINFO("SPEED_UP",    2, AC_WPNav, _wp_speed_up_cms, WPNAV_WP_SPEED_UP),
+    AP_GROUPINFO("SPEED_UP",    2, AC_WPNav, _wp_speed_up_cms, 25.0f),//WPNAV_WP_SPEED_UP),
 
     // @Param: SPEED_DN
     // @DisplayName: Waypoint Descent Speed Target
@@ -40,7 +40,7 @@ const AP_Param::GroupInfo AC_WPNav::var_info[] = {
     // @Range: 10 500
     // @Increment: 10
     // @User: Standard
-    AP_GROUPINFO("SPEED_DN",    3, AC_WPNav, _wp_speed_down_cms, WPNAV_WP_SPEED_DOWN),
+    AP_GROUPINFO("SPEED_DN",    3, AC_WPNav, _wp_speed_down_cms, 25.0f),//WPNAV_WP_SPEED_DOWN),
 
     // @Param: ACCEL
     // @DisplayName: Waypoint Acceleration 

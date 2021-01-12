@@ -404,7 +404,7 @@
 // Landing
 //
 #ifndef LAND_SPEED
- # define LAND_SPEED    50          // the descent speed for the final stage of landing in cm/s
+ # define LAND_SPEED    12//50          // the descent speed for the final stage of landing in cm/s
 #endif
 #ifndef LAND_REPOSITION_DEFAULT
  # define LAND_REPOSITION_DEFAULT   1   // by default the pilot can override roll/pitch during landing
@@ -460,7 +460,7 @@
 #endif
 
 #ifndef ACRO_YAW_P
- # define ACRO_YAW_P                4.5f
+ # define ACRO_YAW_P                1.0f//4.5f
 #endif
 
 #ifndef ACRO_LEVEL_MAX_ANGLE
@@ -526,7 +526,7 @@
 #endif
 
 #ifndef AUTO_YAW_SLEW_RATE
- # define AUTO_YAW_SLEW_RATE    60              // degrees/sec
+ # define AUTO_YAW_SLEW_RATE    9              // degrees/sec
 #endif
 
 #ifndef YAW_LOOK_AHEAD_MIN_SPEED

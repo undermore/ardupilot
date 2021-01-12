@@ -14,14 +14,14 @@
 #define WPNAV_ACCELERATION              100.0f      // defines the default velocity vs distant curve.  maximum acceleration in cm/s/s that position controller asks for from acceleration controller
 #define WPNAV_ACCELERATION_MIN           50.0f      // minimum acceleration in cm/s/s - used for sanity checking _wp_accel parameter
 
-#define WPNAV_WP_SPEED                  500.0f      // default horizontal speed between waypoints in cm/s
+#define WPNAV_WP_SPEED                  110.0f      // default horizontal speed between waypoints in cm/s
 #define WPNAV_WP_SPEED_MIN               5.0f      // minimum horizontal speed between waypoints in cm/s
 #define WPNAV_WP_TRACK_SPEED_MIN         50.0f      // minimum speed along track of the target point the vehicle is chasing in cm/s (used as target slows down before reaching destination)
 #define WPNAV_WP_RADIUS                 200.0f      // default waypoint radius in cm
 #define WPNAV_WP_RADIUS_MIN              10.0f      // minimum waypoint radius in cm
 
-#define WPNAV_WP_SPEED_UP               250.0f      // default maximum climb velocity
-#define WPNAV_WP_SPEED_DOWN             150.0f      // default maximum descent velocity
+#define WPNAV_WP_SPEED_UP               50.0f//250.0f      // default maximum climb velocity
+#define WPNAV_WP_SPEED_DOWN             50.0f//150.0f      // default maximum descent velocity
 
 #define WPNAV_WP_ACCEL_Z_DEFAULT        100.0f      // default vertical acceleration between waypoints in cm/s/s
 
@@ -82,10 +82,10 @@ public:
     float get_speed_xy() const { return _wp_speed_cms; }
 
     /// get_speed_up - returns target climb speed in cm/s during missions
-    float get_speed_up() const { return _wp_speed_up_cms; }
+    float get_speed_up() const { return 25.0f; }//_wp_speed_up_cms; }
 
     /// get_speed_down - returns target descent speed in cm/s during missions.  Note: always positive
-    float get_speed_down() const { return _wp_speed_down_cms; }
+    float get_speed_down() const { return 25.0f; }//_wp_speed_down_cms; }
 
     /// get_speed_z - returns target descent speed in cm/s during missions.  Note: always positive
     float get_accel_z() const { return _wp_accel_z_cmss; }
