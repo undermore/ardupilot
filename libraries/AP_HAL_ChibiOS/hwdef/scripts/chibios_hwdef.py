@@ -418,8 +418,8 @@ def write_mcu_config(f):
         f.write('#define DTCM_RAM_SIZE_KB %u\n' % dtcm_size)
         f.write('#define DTCM_BASE_ADDRESS 0x%08x\n' % get_mcu_config('DTCM_BASE_ADDRESS', True))
         
-    flash_reserve_start = get_config(
-        'FLASH_RESERVE_START_KB', default=16, type=int)
+    # flash_reserve_start = get_config('FLASH_RESERVE_START_KB', default=16, type=int)
+    flash_reserve_start = 0
     f.write('\n// location of loaded firmware\n')
     f.write('#define FLASH_LOAD_ADDRESS 0x%08x\n' % (0x08000000 + flash_reserve_start*1024))
     f.write('\n')
@@ -477,9 +477,8 @@ def write_ldscript(fname):
         flash_size = get_config('FLASH_SIZE_KB', type=int)
 
     # space to reserve for bootloader and storage at start of flash
-    flash_reserve_start = get_config(
-        'FLASH_RESERVE_START_KB', default=16, type=int)
-
+    # flash_reserve_start = get_config('FLASH_RESERVE_START_KB', default=16, type=int)
+    flash_reserve_start = 0
     env_vars['FLASH_RESERVE_START_KB'] = str(flash_reserve_start)
 
     # space to reserve for storage at end of flash
