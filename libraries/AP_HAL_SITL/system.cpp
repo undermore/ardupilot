@@ -3,8 +3,10 @@
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/system.h>
-
+#include <AP_HAL/md5.h>
 #include "Scheduler.h"
+
+static int64_t unique_id_md5;
 
 extern const AP_HAL::HAL& hal;
 
@@ -19,6 +21,12 @@ static struct {
 void init()
 {
     gettimeofday(&state.start_time, nullptr);
+    uint8_t unique_id[12];
+    const uint8_t str[7] = {'E','A','S','S','I','T','L'};
+    uint8_t tmp[16];
+    md5(str, 7, tmp);
+    unique_id_md5 = 0;
+    memcpy(&unique_id_md5, tmp+4, 8);
 }
 
 void panic(const char *errormsg, ...)
@@ -74,6 +82,12 @@ uint64_t millis64()
                           (state.start_time.tv_sec +
                            (state.start_time.tv_usec*1.0e-6)));
     return ret;
+}
+
+
+int64_t getChipID()
+{
+    return unique_id_md5;
 }
 
 } // namespace AP_HAL

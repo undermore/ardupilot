@@ -18,10 +18,18 @@
 #include <stdio.h>
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/system.h>
-
+#include <AP_HAL/md5.h>
 #include <ch.h>
 #include "hal.h"
 #include <hrt.h>
+
+typedef struct chip_id
+{
+    uint8_t  byte[12];
+} chip_id_t;
+
+static chip_id_t unique_id;
+static int64_t unique_id_md5;
 
 extern const AP_HAL::HAL& hal;
 extern "C"
@@ -135,6 +143,17 @@ namespace AP_HAL {
 
 void init()
 {
+#if defined(HAL_CHIBIOS_ARCH_FMUV3)
+
+    memcpy(&unique_id, (void*)0x1FFF7A10, sizeof(unique_id));
+    unique_id.byte[0] ^= 0x55;
+    const uint8_t str[7] = {'E','A','S','S','I','T','L'};
+#else
+    memset(unique_id, 0, sizeof(unique_id));
+#endif
+    uint8_t tmp[16];
+    md5(str, sizeof(str), tmp);
+    memcpy(&unique_id_md5, tmp+4, 8);
 }
 
 void panic(const char *errormsg, ...)
@@ -167,6 +186,11 @@ uint64_t micros64()
 uint64_t millis64()
 {
     return micros64() / 1000;
+}
+
+int64_t getChipID()
+{
+    return unique_id_md5;
 }
 
 } // namespace AP_HAL

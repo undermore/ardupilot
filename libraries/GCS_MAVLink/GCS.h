@@ -291,6 +291,7 @@ protected:
     void handle_mission_count(AP_Mission &mission, mavlink_message_t *msg);
     void handle_mission_write_partial_list(AP_Mission &mission, mavlink_message_t *msg);
     bool handle_mission_item(mavlink_message_t *msg, AP_Mission &mission);
+    void mavlink_handle_mcu_id_request(mavlink_message_t *msg);
 
     void handle_common_param_message(mavlink_message_t *msg);
     void handle_param_set(mavlink_message_t *msg);

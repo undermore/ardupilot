@@ -16,5 +16,6 @@ uint32_t micros();
 uint32_t millis();
 uint64_t micros64();
 uint64_t millis64();
+int64_t getChipID();
 
 } // namespace AP_HAL

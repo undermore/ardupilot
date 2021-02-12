@@ -1584,6 +1584,10 @@ void GCS_MAVLINK_Copter::handleMessage(mavlink_message_t* msg)
         break;
 #endif
         
+    case MAVLINK_MSG_ID_MCU_CHIP_ID_REQUEST:
+        mavlink_handle_mcu_id_request(msg);
+        break;
+
     default:
         handle_common_message(msg);
         break;

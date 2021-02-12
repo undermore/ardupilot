@@ -393,6 +393,22 @@ void GCS_MAVLINK::handle_mission_request_list(AP_Mission &mission, mavlink_messa
     waypoint_receiving = false;             // record that we are sending commands (i.e. not receiving)
 }
 
+void GCS_MAVLINK::mavlink_handle_mcu_id_request(mavlink_message_t *msg)
+{
+    if(msg->msgid != MAVLINK_MSG_ID_MCU_CHIP_ID_REQUEST)
+       return;
+
+    mavlink_mcu_chip_id_request_t packet;
+    mavlink_msg_mcu_chip_id_request_decode(msg, &packet);
+
+    if(packet.key != 0xab)
+        return;
+
+    int64_t id = AP_HAL::getChipID();
+    mavlink_msg_mcu_chip_id_send(chan, id);
+}
+
+
 /*
   handle a MISSION_REQUEST mavlink packet
  */
