@@ -288,6 +288,15 @@ void Copter::init_ardupilot()
     
     hal.console->printf("\nReady to FLY ");
 
+    hal.console->printf("\nChipID:");
+    uint8_t* id = AP_HAL::getChipID();
+    for(uint8_t i = 0; i<12; i++)
+        hal.console->printf("%02x", id[i]);
+
+    hal.console->printf("\nChipID MD5:");
+    int64_t md5 = AP_HAL::getChipIDMD5();
+    hal.console->printf("0x%" PRIx64 "\n", md5);
+
     // flag that initialisation has completed
     ap.initialised = true;
 }

@@ -404,7 +404,7 @@ void GCS_MAVLINK::mavlink_handle_mcu_id_request(mavlink_message_t *msg)
     if(packet.key != 0xab)
         return;
 
-    int64_t id = AP_HAL::getChipID();
+    int64_t id = AP_HAL::getChipIDMD5();
     mavlink_msg_mcu_chip_id_send(chan, id);
 }
 

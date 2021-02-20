@@ -144,15 +144,14 @@ namespace AP_HAL {
 void init()
 {
 #if defined(HAL_CHIBIOS_ARCH_FMUV3)
-
+    //96bit ID 首字节异或 0x55 之后直接计算MD5
     memcpy(&unique_id, (void*)0x1FFF7A10, sizeof(unique_id));
     unique_id.byte[0] ^= 0x55;
-    const uint8_t str[7] = {'E','A','S','S','I','T','L'};
 #else
     memset(unique_id, 0, sizeof(unique_id));
 #endif
     uint8_t tmp[16];
-    md5(str, sizeof(str), tmp);
+    md5((const uint8_t*)&unique_id, sizeof(unique_id), tmp);
     memcpy(&unique_id_md5, tmp+4, 8);
 }
 
@@ -188,9 +187,15 @@ uint64_t millis64()
     return micros64() / 1000;
 }
 
-int64_t getChipID()
+int64_t getChipIDMD5()
 {
     return unique_id_md5;
 }
+
+uint8_t* getChipID()
+{
+    return (uint8_t*)&unique_id;
+}
+
 
 } // namespace AP_HAL

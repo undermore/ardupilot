@@ -6,6 +6,8 @@
 #include <AP_HAL/md5.h>
 #include "Scheduler.h"
 
+static uint8_t unique_id[7] = {'E','A','S','S','I','T','L'};
+
 static int64_t unique_id_md5;
 
 extern const AP_HAL::HAL& hal;
@@ -85,9 +87,14 @@ uint64_t millis64()
 }
 
 
-int64_t getChipID()
+int64_t getChipIDMD5()
 {
     return unique_id_md5;
+}
+
+uint8_t* getChipID()
+{
+    return unique_id;
 }
 
 } // namespace AP_HAL
