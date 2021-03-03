@@ -82,10 +82,10 @@ public:
     float get_speed_xy() const { return _wp_speed_cms; }
 
     /// get_speed_up - returns target climb speed in cm/s during missions
-    float get_speed_up() const { return 25.0f; }//_wp_speed_up_cms; }
+    float get_speed_up() const { return 30.0f; }//_wp_speed_up_cms; }
 
     /// get_speed_down - returns target descent speed in cm/s during missions.  Note: always positive
-    float get_speed_down() const { return 25.0f; }//_wp_speed_down_cms; }
+    float get_speed_down() const { return 30.0f; }//_wp_speed_down_cms; }
 
     /// get_speed_z - returns target descent speed in cm/s during missions.  Note: always positive
     float get_accel_z() const { return _wp_accel_z_cmss; }

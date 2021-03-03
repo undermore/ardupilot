@@ -29,7 +29,11 @@ Copter::Mode::Mode(void) :
     heli_flags(copter.heli_flags),
 #endif
     ekfNavVelGainScaler(copter.ekfNavVelGainScaler)
-{ };
+{
+    g.land_speed = 20;
+    g2.land_alt_low = 100;
+    g.land_speed_high = 30;
+};
 
 // return the static controller object corresponding to supplied mode
 Copter::Mode *Copter::mode_from_mode_num(const uint8_t mode)

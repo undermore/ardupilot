@@ -213,7 +213,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Range: 30 200
     // @Increment: 10
     // @User: Standard
-    GSCALAR(land_speed,             "LAND_SPEED",   12),//LAND_SPEED),
+    GSCALAR(land_speed,             "LAND_SPEED",   20),//LAND_SPEED),
 
     // @Param: LAND_SPEED_HIGH
     // @DisplayName: Land speed high
@@ -222,7 +222,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Range: 0 500
     // @Increment: 10
     // @User: Standard
-    GSCALAR(land_speed_high,        "LAND_SPEED_HIGH",   0),
+    GSCALAR(land_speed_high,        "LAND_SPEED_HIGH",   30),
     
     // @Param: PILOT_SPEED_UP
     // @DisplayName: Pilot maximum vertical speed ascending
@@ -972,7 +972,7 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @Range: 100 10000
     // @Increment: 10
     // @User: Advanced
-    AP_GROUPINFO("LAND_ALT_LOW", 25, ParametersG2, land_alt_low, 1000),
+    AP_GROUPINFO("LAND_ALT_LOW", 25, ParametersG2, land_alt_low, 100),
 
 #if !HAL_MINIMIZE_FEATURES && OPTFLOW == ENABLED
     // @Group: FHLD

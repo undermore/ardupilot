@@ -31,7 +31,7 @@ const AP_Param::GroupInfo AC_WPNav::var_info[] = {
     // @Range: 10 1000
     // @Increment: 50
     // @User: Standard
-    AP_GROUPINFO("SPEED_UP",    2, AC_WPNav, _wp_speed_up_cms, 25.0f),//WPNAV_WP_SPEED_UP),
+    AP_GROUPINFO("SPEED_UP",    2, AC_WPNav, _wp_speed_up_cms, 30.0f),//WPNAV_WP_SPEED_UP),
 
     // @Param: SPEED_DN
     // @DisplayName: Waypoint Descent Speed Target
@@ -40,7 +40,7 @@ const AP_Param::GroupInfo AC_WPNav::var_info[] = {
     // @Range: 10 500
     // @Increment: 10
     // @User: Standard
-    AP_GROUPINFO("SPEED_DN",    3, AC_WPNav, _wp_speed_down_cms, 25.0f),//WPNAV_WP_SPEED_DOWN),
+    AP_GROUPINFO("SPEED_DN",    3, AC_WPNav, _wp_speed_down_cms, 30.0f),//WPNAV_WP_SPEED_DOWN),
 
     // @Param: ACCEL
     // @DisplayName: Waypoint Acceleration 
@@ -150,7 +150,7 @@ void AC_WPNav::wp_and_spline_init()
     // initialise position controller speed and acceleration
     _pos_control.set_speed_xy(_wp_speed_cms);
     _pos_control.set_accel_xy(_wp_accel_cmss);
-    _pos_control.set_speed_z(-_wp_speed_down_cms, _wp_speed_up_cms);
+    _pos_control.set_speed_z(30.0f, 30.0f);//(-_wp_speed_down_cms, _wp_speed_up_cms);
     _pos_control.set_accel_z(_wp_accel_z_cmss);
     _pos_control.calc_leash_length_xy();
     _pos_control.calc_leash_length_z();
@@ -547,7 +547,7 @@ void AC_WPNav::calculate_wp_leash_length()
     float speed_z;
     float leash_z;
     if (_pos_delta_unit.z >= 0.0f) {
-        speed_z = _wp_speed_up_cms;
+        speed_z = 30.0f;//_wp_speed_up_cms;
         leash_z = _pos_control.get_leash_up_z();
     }else{
         speed_z = _wp_speed_down_cms;
