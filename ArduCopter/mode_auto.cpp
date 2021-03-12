@@ -492,8 +492,8 @@ bool Copter::ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
     case MAV_CMD_DO_FENCE_ENABLE:
 #if AC_FENCE == ENABLED
         if (cmd.p1 == 0) { //disable
-            copter.fence.enable(false);
-            gcs().send_text(MAV_SEVERITY_INFO, "Fence Disabled");
+            //copter.fence.enable(false);
+            //gcs().send_text(MAV_SEVERITY_INFO, "Fence Disabled");
         } else { //enable fence
             copter.fence.enable(true);
             gcs().send_text(MAV_SEVERITY_INFO, "Fence Enabled");

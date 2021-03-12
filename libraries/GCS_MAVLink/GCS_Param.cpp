@@ -141,7 +141,7 @@ void GCS_MAVLINK::handle_request_data_stream(mavlink_message_t *msg)
     AP_Int16 *rate = nullptr;
     switch (packet.req_stream_id) {
     case MAV_DATA_STREAM_ALL:
-        break;
+        //break;
         // note that we don't set STREAM_PARAMS - that is internal only
         for (uint8_t i=0; i<STREAM_PARAMS; i++) {
             if (persist_streamrates()) {
