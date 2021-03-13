@@ -447,7 +447,7 @@ bool AP_Arming_Copter::pre_arm_terrain_check(bool display_failure)
     // check if terrain following is enabled, using a range finder but RTL_ALT is higher than rangefinder's max range
     // To-Do: modify RTL return path to fly at or above the RTL_ALT and remove this check
 
-    if (copter.rangefinder_state.enabled && (copter.g.rtl_altitude > copter.rangefinder.max_distance_cm_orient(ROTATION_PITCH_270))) {
+    if (copter.rangefinder_state.enabled && (900 > copter.rangefinder.max_distance_cm_orient(ROTATION_PITCH_270))) {
         check_failed(ARMING_CHECK_PARAMETERS, display_failure, "RTL_ALT above rangefinder max range");
         return false;
     }

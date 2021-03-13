@@ -6,9 +6,9 @@ extern const AP_HAL::HAL& hal;
 #define LOITER_SPEED_DEFAULT                1250.0f // default loiter speed in cm/s
 #define LOITER_SPEED_MIN                    20.0f   // minimum loiter speed in cm/s
 #define LOITER_ACCEL_MAX_DEFAULT            500.0f  // default acceleration in loiter mode
-#define LOITER_BRAKE_ACCEL_DEFAULT          250.0f  // minimum acceleration in loiter mode
-#define LOITER_BRAKE_JERK_DEFAULT           500.0f  // maximum jerk in cm/s/s/s in loiter mode
-#define LOITER_BRAKE_START_DELAY_DEFAULT    1.0f    // delay (in seconds) before loiter braking begins after sticks are released
+#define LOITER_BRAKE_ACCEL_DEFAULT          130.0f//250.0f  // minimum acceleration in loiter mode
+#define LOITER_BRAKE_JERK_DEFAULT           800.0f//500.0f  // maximum jerk in cm/s/s/s in loiter mode
+#define LOITER_BRAKE_START_DELAY_DEFAULT    0.8f//1.0f    // delay (in seconds) before loiter braking begins after sticks are released
 #define LOITER_VEL_CORRECTION_MAX           200.0f  // max speed used to correct position errors in loiter
 #define LOITER_POS_CORRECTION_MAX           200.0f  // max position error in loiter
 #define LOITER_ACTIVE_TIMEOUT_MS            200     // loiter controller is considered active if it has been called within the past 200ms (0.2 seconds)
@@ -92,7 +92,7 @@ void AC_Loiter::init_target(const Vector3f& position)
 
     // initialise pos controller speed, acceleration
     _pos_control.set_speed_xy(LOITER_VEL_CORRECTION_MAX);
-    _pos_control.set_accel_xy(_accel_cmss);
+    _pos_control.set_accel_xy(500.0f);
 
     // initialise desired acceleration and angles to zero to remain on station
     _predicted_accel.zero();
@@ -120,7 +120,7 @@ void AC_Loiter::init_target()
 
     // initialise pos controller speed and acceleration
     _pos_control.set_speed_xy(LOITER_VEL_CORRECTION_MAX);
-    _pos_control.set_accel_xy(_accel_cmss);
+    _pos_control.set_accel_xy(500.0f);
     _pos_control.set_leash_length_xy(LOITER_POS_CORRECTION_MAX);
 
     _predicted_accel = _desired_accel;
@@ -215,7 +215,7 @@ void AC_Loiter::update(float ekfGndSpdLimit, float ekfNavVelGainScaler)
 
     // initialise pos controller speed and acceleration
     _pos_control.set_speed_xy(_speed_cms);
-    _pos_control.set_accel_xy(_accel_cmss);
+    _pos_control.set_accel_xy(500.0f);
 
     calc_desired_velocity(dt,ekfGndSpdLimit);
     _pos_control.update_xy_controller(ekfNavVelGainScaler);
@@ -225,7 +225,7 @@ void AC_Loiter::update(float ekfGndSpdLimit, float ekfNavVelGainScaler)
 void AC_Loiter::sanity_check_params()
 {
     _speed_cms = MAX(_speed_cms, LOITER_SPEED_MIN);
-    _accel_cmss = MIN(_accel_cmss, GRAVITY_MSS * 100.0f * tanf(ToRad(_attitude_control.lean_angle_max() * 0.01f)));
+    _accel_cmss = MIN(500.0f, GRAVITY_MSS * 100.0f * tanf(ToRad(_attitude_control.lean_angle_max() * 0.01f)));
 }
 
 /// calc_desired_velocity - updates desired velocity (i.e. feed forward) with pilot requested acceleration and fake wind resistance
@@ -245,7 +245,7 @@ void AC_Loiter::calc_desired_velocity(float nav_dt, float ekfGndSpdLimit)
     }
 
     _pos_control.set_speed_xy(gnd_speed_limit_cms);
-    _pos_control.set_accel_xy(_accel_cmss);
+    _pos_control.set_accel_xy(500.0f);
     _pos_control.set_leash_length_xy(LOITER_POS_CORRECTION_MAX);
 
     // get loiters desired velocity from the position controller where it is being stored.
@@ -272,15 +272,15 @@ void AC_Loiter::calc_desired_velocity(float nav_dt, float ekfGndSpdLimit)
         // calculate a braking acceleration if sticks are at zero
         float loiter_brake_accel = 0.0f;
         if (_desired_accel.is_zero()) {
-            if ((AP_HAL::millis()-_brake_timer) > _brake_delay * 1000.0f) {
+            if ((AP_HAL::millis()-_brake_timer) > 0.8f * 1000.0f) {
                 float brake_gain = _pos_control.get_vel_xy_pid().kP() * 0.5f;
-                loiter_brake_accel = constrain_float(AC_AttitudeControl::sqrt_controller(desired_speed, brake_gain, _brake_jerk_max_cmsss, nav_dt), 0.0f, _brake_accel_cmss);
+                loiter_brake_accel = constrain_float(AC_AttitudeControl::sqrt_controller(desired_speed, brake_gain, 800.0f, nav_dt), 0.0f, 130.0f);
             }
         } else {
             loiter_brake_accel = 0.0f;
             _brake_timer = AP_HAL::millis();
         }
-        _brake_accel += constrain_float(loiter_brake_accel-_brake_accel, -_brake_jerk_max_cmsss*nav_dt, _brake_jerk_max_cmsss*nav_dt);
+        _brake_accel += constrain_float(loiter_brake_accel-_brake_accel, -800.0f*nav_dt, 800.0f*nav_dt);
         loiter_accel_brake = desired_vel_norm*_brake_accel;
 
         // update the desired velocity using the drag and braking accelerations
@@ -301,7 +301,7 @@ void AC_Loiter::calc_desired_velocity(float nav_dt, float ekfGndSpdLimit)
     // Limit the velocity to prevent fence violations
     // TODO: We need to also limit the _desired_accel
     if (_avoid != nullptr) {
-        _avoid->adjust_velocity(_pos_control.get_pos_xy_p().kP(), _accel_cmss, desired_vel, nav_dt);
+        _avoid->adjust_velocity(_pos_control.get_pos_xy_p().kP(), 500.0f, desired_vel, nav_dt);
     }
 
     // send adjusted feed forward acceleration and velocity back to the Position Controller

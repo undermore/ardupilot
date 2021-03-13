@@ -1183,9 +1183,9 @@ void Copter::convert_pid_parameters(void)
     // TradHeli default parameters
 #if FRAME_CONFIG == HELI_FRAME
     AP_Param::set_default_by_name("LOIT_ACC_MAX", 500.0f);
-    AP_Param::set_default_by_name("LOIT_BRK_ACCEL", 125.0f);
-    AP_Param::set_default_by_name("LOIT_BRK_DELAY", 1.0f);
-    AP_Param::set_default_by_name("LOIT_BRK_JERK", 250.0f);
+    AP_Param::set_default_by_name("LOIT_BRK_ACCEL", 130.0f);//125.0f);
+    AP_Param::set_default_by_name("LOIT_BRK_DELAY", 0.8f);//1.0f);
+    AP_Param::set_default_by_name("LOIT_BRK_JERK", 800.0f);//250.0f);
     AP_Param::set_default_by_name("LOIT_SPEED", 3000.0f);
     AP_Param::set_default_by_name("PHLD_BRAKE_ANGLE", 800.0f);
     AP_Param::set_default_by_name("PHLD_BRAKE_RATE", 4.0f);
