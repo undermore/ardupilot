@@ -49,9 +49,9 @@ public:
                         const AP_Vehicle::MultiCopter &aparm,
                         AP_Motors& motors,
                         float dt) :
-        _p_angle_roll(AC_ATTITUDE_CONTROL_ANGLE_P),
-        _p_angle_pitch(AC_ATTITUDE_CONTROL_ANGLE_P),
-        _p_angle_yaw(AC_ATTITUDE_CONTROL_ANGLE_P),
+        _p_angle_roll(7.0f),//AC_ATTITUDE_CONTROL_ANGLE_P),
+        _p_angle_pitch(7.0f),//AC_ATTITUDE_CONTROL_ANGLE_P),
+        _p_angle_yaw(5.5f),//AC_ATTITUDE_CONTROL_ANGLE_P),
         _dt(dt),
         _angle_boost(0),
         _use_sqrt_controller(true),

@@ -4,7 +4,7 @@
 #include "AP_BattMonitor_Analog.h"
 
 #if APM_BUILD_TYPE(APM_BUILD_ArduCopter)
-  #define DEFAULT_LOW_BATTERY_VOLTAGE 10.5f
+  #define DEFAULT_LOW_BATTERY_VOLTAGE 20.0f //10.5f
 #else
   #define DEFAULT_LOW_BATTERY_VOLTAGE 0.0f
 #endif // APM_BUILD_TYPE(APM_BUILD_ArduCopter)
@@ -133,7 +133,7 @@ const AP_Param::GroupInfo AP_BattMonitor_Params::var_info[] = {
     // @Values{Rover}: 0:None,1:RTL,2:Hold,3:SmartRTL,4:SmartRTL or Hold,5:Terminate
     // @Values{Tracker}: 0:None
     // @User: Standard
-    AP_GROUPINFO("FS_LOW_ACT", 16, AP_BattMonitor_Params, _failsafe_low_action, 0),
+    AP_GROUPINFO("FS_LOW_ACT", 16, AP_BattMonitor_Params, _failsafe_low_action, 2),
 
     // @Param: FS_CRT_ACT
     // @DisplayName: Critical battery failsafe action

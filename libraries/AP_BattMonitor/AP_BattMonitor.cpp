@@ -324,7 +324,7 @@ void AP_BattMonitor::check_failsafes(void)
                 case AP_BattMonitor::BatteryFailsafe_None:
                     continue; // should not have been called in this case
                 case AP_BattMonitor::BatteryFailsafe_Low:
-                    action = _params[i]._failsafe_low_action;
+                    action = 2;//_params[i]._failsafe_low_action;
                     type_str = "low";
                     break;
                 case AP_BattMonitor::BatteryFailsafe_Critical:
