@@ -68,6 +68,9 @@ void Copter::fence_send_mavlink_status(mavlink_channel_t chan)
         if ((breaches & AC_FENCE_TYPE_ALT_MAX) != 0) {
             mavlink_breach_type = FENCE_BREACH_MAXALT;
         }
+        if ((breaches & AC_FENCE_TYPE_ALT_MIN) != 0) {
+                    mavlink_breach_type = FENCE_BREACH_MINALT;
+                }
         if ((breaches & (AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON)) != 0) {
             mavlink_breach_type = FENCE_BREACH_BOUNDARY;
         }
