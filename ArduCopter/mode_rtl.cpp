@@ -446,7 +446,7 @@ void Copter::ModeRTL::compute_return_target(bool terrain_following_allowed)
 
     // increase target to maximum of current altitude + climb_min and rtl altitude
     target_alt = MAX(target_alt, curr_alt + MAX(0, g.rtl_climb_min));
-    target_alt = MAX(target_alt, MAX(900, RTL_ALT_MIN));
+    target_alt = MAX(target_alt, MAX(900, 200));//RTL_ALT_MIN));
 
     // reduce climb if close to return target
     float rtl_return_dist_cm = rtl_path.return_target.get_distance(rtl_path.origin_point) * 100.0f;
@@ -467,10 +467,14 @@ void Copter::ModeRTL::compute_return_target(bool terrain_following_allowed)
     if ((copter.fence.get_enabled_fences() & AC_FENCE_TYPE_ALT_MAX) != 0) {
         // get return target as alt-above-home so it can be compared to fence's alt
         if (rtl_path.return_target.get_alt_cm(Location_Class::ALT_FRAME_ABOVE_HOME, target_alt)) {
-            float fence_alt = copter.fence.get_safe_alt_max()*100.0f;
+            float fence_alt = 900.0f;//copter.fence.get_safe_alt_max()*100.0f;
+            float fence_alt_min = copter.fence.get_safe_alt_min()*100.0f;
             if (target_alt > fence_alt) {
                 // reduce target alt to the fence alt
                 rtl_path.return_target.alt -= (target_alt - fence_alt);
+            } else if(target_alt < fence_alt_min)
+            {
+                rtl_path.return_target.alt += (fence_alt_min - target_alt);
             }
         }
     }

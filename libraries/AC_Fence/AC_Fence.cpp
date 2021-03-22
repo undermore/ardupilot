@@ -11,7 +11,7 @@ const AP_Param::GroupInfo AC_Fence::var_info[] = {
     // @Description: Allows you to enable (1) or disable (0) the fence functionality
     // @Values: 0:Disabled,1:Enabled
     // @User: Standard
-    AP_GROUPINFO("ENABLE",      0,  AC_Fence,   _enabled,   0),
+    AP_GROUPINFO("ENABLE",      0,  AC_Fence,   _enabled,   1),
 
     // @Param: TYPE
     // @DisplayName: Fence Type
@@ -67,7 +67,7 @@ const AP_Param::GroupInfo AC_Fence::var_info[] = {
     // @Range: -100 100
     // @Increment: 1
     // @User: Standard
-    AP_GROUPINFO_FRAME("ALT_MIN",     7,  AC_Fence,   _alt_min,       AC_FENCE_ALT_MIN_DEFAULT, AP_PARAM_FRAME_SUB),
+    AP_GROUPINFO_FRAME("ALT_MIN",     7,  AC_Fence,   _alt_min,       AC_FENCE_ALT_MIN_DEFAULT, AP_PARAM_FRAME_COPTER | AP_PARAM_FRAME_SUB),
 
     AP_GROUPEND
 };
@@ -355,6 +355,17 @@ uint8_t AC_Fence::check()
 // returns true if the destination is within fence (used to reject waypoints outside the fence)
 bool AC_Fence::check_destination_within_fence(const Location_Class& loc)
 {
+    if (get_enabled_fences()) {
+        int32_t alt_above_home_cm;
+        if (loc.get_alt_cm(Location_Class::ALT_FRAME_ABOVE_HOME, alt_above_home_cm)) {
+            if ((alt_above_home_cm * 0.01f) < _alt_min) {
+                if ((get_distance_cm(_ahrs.get_home(), loc) * 0.01f) > 1.5f) {
+                    return false;
+                }
+            }
+        }
+    }
+
     // Altitude fence check
     if ((get_enabled_fences() & AC_FENCE_TYPE_ALT_MAX)) {
         int32_t alt_above_home_cm;

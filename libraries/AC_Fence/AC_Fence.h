@@ -19,12 +19,12 @@
 #define AC_FENCE_ACTION_RTL_AND_LAND                1       // return to launch and, if that fails, land
 #define AC_FENCE_ACTION_ALWAYS_LAND                 2       // always land
 // default boundaries
-#define AC_FENCE_ALT_MAX_DEFAULT                    100.0f  // default max altitude is 100m
-#define AC_FENCE_ALT_MIN_DEFAULT                    -10.0f  // default maximum depth in meters
+#define AC_FENCE_ALT_MAX_DEFAULT                    9.0f  // default max altitude is 100m
+#define AC_FENCE_ALT_MIN_DEFAULT                    2.0f  // default maximum depth in meters
 #define AC_FENCE_CIRCLE_RADIUS_DEFAULT              300.0f  // default circular fence radius is 300m
-#define AC_FENCE_ALT_MAX_BACKUP_DISTANCE            20.0f   // after fence is broken we recreate the fence 20m further up
+#define AC_FENCE_ALT_MAX_BACKUP_DISTANCE            9.0f   // after fence is broken we recreate the fence 20m further up
 #define AC_FENCE_CIRCLE_RADIUS_BACKUP_DISTANCE      20.0f   // after fence is broken we recreate the fence 20m further out
-#define AC_FENCE_MARGIN_DEFAULT                     2.0f    // default distance in meters that autopilot's should maintain from the fence to avoid a breach
+#define AC_FENCE_MARGIN_DEFAULT                     0.2f    // default distance in meters that autopilot's should maintain from the fence to avoid a breach
 
 // give up distance
 #define AC_FENCE_GIVE_UP_DISTANCE                   100.0f  // distance outside the fence at which we should give up and just land.  Note: this is not used by library directly but is intended to be used by the main code
@@ -77,10 +77,10 @@ public:
     uint8_t get_action() const { return _action.get(); }
 
     /// get_safe_alt - returns maximum safe altitude (i.e. alt_max - margin)
-    float get_safe_alt_max() const { return _alt_max - _margin; }
+    float get_safe_alt_max() const { return 9.0f - _margin; } //_alt_max - _margin; }
 
     /// get_safe_alt_min - returns the minimum safe altitude (i.e. alt_min - margin)
-    float get_safe_alt_min() const { return _alt_min + _margin; }
+    float get_safe_alt_min() const { return 2.0f + _margin; }
 
     /// get_radius - returns the fence radius in meters
     float get_radius() const { return _circle_radius.get(); }
