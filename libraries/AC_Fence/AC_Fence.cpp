@@ -26,7 +26,7 @@ const AP_Param::GroupInfo AC_Fence::var_info[] = {
     // @Description: What action should be taken when fence is breached
     // @Values: 0:Report Only,1:RTL or Land, 2:Always land
     // @User: Standard
-    AP_GROUPINFO("ACTION",      2,  AC_Fence,   _action,        AC_FENCE_ACTION_BRAKE), //AC_FENCE_ACTION_RTL_AND_LAND),
+    AP_GROUPINFO("ACTION",      2,  AC_Fence,   _action_unused,        AC_FENCE_ACTION_BRAKE), //AC_FENCE_ACTION_RTL_AND_LAND),
 
     // @Param: ALT_MAX
     // @DisplayName: Fence Maximum Altitude
@@ -79,6 +79,7 @@ AC_Fence::AC_Fence(const AP_AHRS_NavEKF& ahrs) :
     AP_Param::setup_object_defaults(this, var_info);
     _my_alt_max = 9.0f;
     _my_alt_min = 2.0f;
+    _action = AC_FENCE_ACTION_BRAKE;
     _enabled_fences = (AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON);
 }
 
@@ -366,9 +367,19 @@ uint8_t AC_Fence::check()
         ret |= AC_FENCE_TYPE_ALT_MAX;
     }
 
-    if (check_fence_alt_min()) {
-        ret |= AC_FENCE_TYPE_ALT_MIN;
+    Location temp_loc;
+    if (_ahrs.get_location(temp_loc)) {
+
+        float arround_home_cm = get_distance_cm(_ahrs.get_home(), temp_loc);
+
+        if(arround_home_cm > 120.0f)
+        {
+            if (check_fence_alt_min()) {
+                ret |= AC_FENCE_TYPE_ALT_MIN;
+            }
+        }
     }
+
 
     // circle fence check
     if (check_fence_circle()) {
@@ -391,7 +402,7 @@ bool AC_Fence::check_destination_within_fence(const Location_Class& loc)
         int32_t alt_above_home_cm;
         if (loc.get_alt_cm(Location_Class::ALT_FRAME_ABOVE_HOME, alt_above_home_cm)) {
             if ((alt_above_home_cm * 0.01f) < _my_alt_min) {
-                if ((get_distance_cm(_ahrs.get_home(), loc) * 0.01f) > 1.5f) {
+                if ((get_distance_cm(_ahrs.get_home(), loc) * 0.01f) > 1.2f) {
                     return false;
                 }
             }

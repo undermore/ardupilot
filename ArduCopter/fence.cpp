@@ -36,12 +36,16 @@ void Copter::fence_check()
                 if (fence.get_action() == AC_FENCE_ACTION_ALWAYS_LAND) {
                     set_mode(LAND, MODE_REASON_FENCE_BREACH);
                 } else if (fence.get_breach_distance(new_breaches) <= AC_FENCE_GIVE_UP_DISTANCE) {
-                    //if (!set_mode(RTL, MODE_REASON_FENCE_BREACH)) {
-                        //set_mode(LAND, MODE_REASON_FENCE_BREACH);
-                        // if we are within 100m of the fence, RTL
-                    //}
-                } else if (fence.get_action() == AC_FENCE_ACTION_BRAKE) {
-                    set_mode(BRAKE, MODE_REASON_FENCE_BREACH);
+
+                    if (fence.get_action() == AC_FENCE_ACTION_BRAKE) {
+                            set_mode(BRAKE, MODE_REASON_FENCE_BREACH);
+                    } else
+                    {
+                        if (!set_mode(RTL, MODE_REASON_FENCE_BREACH)) {
+                            set_mode(LAND, MODE_REASON_FENCE_BREACH);
+                            // if we are within 100m of the fence, RTL
+                        }
+                    }
                 } else {
                     // if more than 100m outside the fence just force a land
                     set_mode(LAND, MODE_REASON_FENCE_BREACH);
@@ -69,8 +73,8 @@ void Copter::fence_send_mavlink_status(mavlink_channel_t chan)
             mavlink_breach_type = FENCE_BREACH_MAXALT;
         }
         if ((breaches & AC_FENCE_TYPE_ALT_MIN) != 0) {
-                    mavlink_breach_type = FENCE_BREACH_MINALT;
-                }
+            mavlink_breach_type = FENCE_BREACH_MINALT;
+        }
         if ((breaches & (AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON)) != 0) {
             mavlink_breach_type = FENCE_BREACH_BOUNDARY;
         }
