@@ -19,14 +19,14 @@ const AP_Param::GroupInfo AC_Fence::var_info[] = {
     // @Values: 0:None,1:Altitude,2:Circle,3:Altitude and Circle,4:Polygon,5:Altitude and Polygon,6:Circle and Polygon,7:All
     // @Bitmask: 0:Altitude,1:Circle,2:Polygon
     // @User: Standard
-    AP_GROUPINFO("TYPE",        1,  AC_Fence,   _enabled_fences,  AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON),
+    AP_GROUPINFO("TYPE",        1,  AC_Fence,   _enabled_fences,  AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON),
 
     // @Param: ACTION
     // @DisplayName: Fence Action
     // @Description: What action should be taken when fence is breached
     // @Values: 0:Report Only,1:RTL or Land, 2:Always land
     // @User: Standard
-    AP_GROUPINFO("ACTION",      2,  AC_Fence,   _action,        AC_FENCE_ACTION_RTL_AND_LAND),
+    AP_GROUPINFO("ACTION",      2,  AC_Fence,   _action,        AC_FENCE_ACTION_BRAKE), //AC_FENCE_ACTION_RTL_AND_LAND),
 
     // @Param: ALT_MAX
     // @DisplayName: Fence Maximum Altitude
@@ -174,6 +174,31 @@ bool AC_Fence::pre_arm_check(const char* &fail_msg) const
 
     // if we got this far everything must be ok
     return true;
+}
+
+bool AC_Fence::check_fence_alt_min()
+{
+    if (!(_enabled_fences & AC_FENCE_TYPE_ALT_MIN)) {
+            return false;
+    }
+
+    _ahrs.get_relative_position_D_home(_curr_alt);
+    _curr_alt = -_curr_alt;
+
+    if(_curr_alt <= _alt_min) {
+        if( !(_breached_fences & AC_FENCE_TYPE_ALT_MIN))
+        {
+            record_breach(AC_FENCE_TYPE_ALT_MIN);
+            return true;
+        }
+        return false;
+    }
+
+    if ((_breached_fences & AC_FENCE_TYPE_ALT_MIN) != 0) {
+        clear_breach(AC_FENCE_TYPE_ALT_MIN);
+    }
+
+    return false;
 }
 
 bool AC_Fence::check_fence_alt_max()
@@ -336,6 +361,10 @@ uint8_t AC_Fence::check()
     // maximum altitude fence check
     if (check_fence_alt_max()) {
         ret |= AC_FENCE_TYPE_ALT_MAX;
+    }
+
+    if (check_fence_alt_min()) {
+        ret |= AC_FENCE_TYPE_ALT_MIN;
     }
 
     // circle fence check

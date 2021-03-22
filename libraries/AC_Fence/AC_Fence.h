@@ -13,17 +13,19 @@
 #define AC_FENCE_TYPE_ALT_MAX                       1       // high alt fence which usually initiates an RTL
 #define AC_FENCE_TYPE_CIRCLE                        2       // circular horizontal fence (usually initiates an RTL)
 #define AC_FENCE_TYPE_POLYGON                       4       // polygon horizontal fence
+#define AC_FENCE_TYPE_ALT_MIN                       8
 
 // valid actions should a fence be breached
 #define AC_FENCE_ACTION_REPORT_ONLY                 0       // report to GCS that boundary has been breached but take no further action
 #define AC_FENCE_ACTION_RTL_AND_LAND                1       // return to launch and, if that fails, land
 #define AC_FENCE_ACTION_ALWAYS_LAND                 2       // always land
+#define AC_FENCE_ACTION_BRAKE                       3
 // default boundaries
 #define AC_FENCE_ALT_MAX_DEFAULT                    9.0f  // default max altitude is 100m
 #define AC_FENCE_ALT_MIN_DEFAULT                    2.0f  // default maximum depth in meters
 #define AC_FENCE_CIRCLE_RADIUS_DEFAULT              300.0f  // default circular fence radius is 300m
-#define AC_FENCE_ALT_MAX_BACKUP_DISTANCE            9.0f   // after fence is broken we recreate the fence 20m further up
-#define AC_FENCE_CIRCLE_RADIUS_BACKUP_DISTANCE      20.0f   // after fence is broken we recreate the fence 20m further out
+#define AC_FENCE_ALT_MAX_BACKUP_DISTANCE            0.1f   // after fence is broken we recreate the fence 20m further up
+#define AC_FENCE_CIRCLE_RADIUS_BACKUP_DISTANCE      0.2f   // after fence is broken we recreate the fence 20m further out
 #define AC_FENCE_MARGIN_DEFAULT                     0.2f    // default distance in meters that autopilot's should maintain from the fence to avoid a breach
 
 // give up distance
@@ -117,6 +119,7 @@ private:
 
     /// check_fence_alt_max - true if alt fence has been newly breached
     bool check_fence_alt_max();
+    bool check_fence_alt_min();
 
     /// check_fence_polygon - true if polygon fence has been newly breached
     bool check_fence_polygon();
