@@ -1008,7 +1008,7 @@ void GCS_MAVLINK_Copter::handleMessage(mavlink_message_t* msg)
             result = MAV_RESULT_ACCEPTED;
             switch ((uint16_t)packet.param1) {
                 case 0:
-                    //copter.fence.enable(false);
+                    copter.fence.enable(false);
                     break;
                 case 1:
                     copter.fence.enable(true);
