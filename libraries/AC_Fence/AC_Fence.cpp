@@ -11,7 +11,7 @@ const AP_Param::GroupInfo AC_Fence::var_info[] = {
     // @Description: Allows you to enable (1) or disable (0) the fence functionality
     // @Values: 0:Disabled,1:Enabled
     // @User: Standard
-    AP_GROUPINFO("ENABLE",      0,  AC_Fence,   _enabled,   1),
+    AP_GROUPINFO("ENABLE",      0,  AC_Fence,   _enabled,   0),
 
     // @Param: TYPE
     // @DisplayName: Fence Type
@@ -557,6 +557,7 @@ void AC_Fence::handle_msg(GCS_MAVLINK &link, mavlink_message_t* msg)
             Vector2l point;
             if (_poly_loader.load_point_from_eeprom(packet.idx, point)) {
                 mavlink_msg_fence_point_send_buf(msg, link.get_chan(), msg->sysid, msg->compid, packet.idx, _total, point.x*1.0e-7f, point.y*1.0e-7f);
+                enable(true);
             } else {
                 link.send_text(MAV_SEVERITY_WARNING, "Bad fence point");
             }
