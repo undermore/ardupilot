@@ -22,7 +22,7 @@ void Copter::fence_check()
 
     // if there is a new breach take action
     if (new_breaches) {
-        printf("%x\n",new_breaches);
+        //printf("%x\n",new_breaches);
         // if the user wants some kind of response and motors are armed
         if(fence.get_action() != AC_FENCE_ACTION_REPORT_ONLY ) {
 

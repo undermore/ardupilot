@@ -89,6 +89,7 @@ void AC_Fence::enable(bool value)
     if (!value) {
         clear_breach(AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON);
     }
+    _manual_recovery_start_ms = 0;
 }
 
 /// get_enabled_fences - returns bitmask of enabled fences
@@ -292,8 +293,12 @@ bool AC_Fence::check_fence_polygon()
 
         _polygon_breach_distance = 1.0f;
         // check if this is a new breach
-        if (!(_breached_fences & AC_FENCE_TYPE_POLYGON)) {
+        if (_polygon_breached_backup == 1
+                |
+            !(_breached_fences & AC_FENCE_TYPE_POLYGON))
+        {
 
+            _polygon_breached_backup = 1;
             // record that we have breached the polygon
             record_breach(AC_FENCE_TYPE_POLYGON);
             return true;
@@ -306,6 +311,7 @@ bool AC_Fence::check_fence_polygon()
     if (_breached_fences & AC_FENCE_TYPE_POLYGON) {
         clear_breach(AC_FENCE_TYPE_POLYGON);
         _polygon_breach_distance = 0.0f;
+        _polygon_breached_backup = 0;
     }
 
     return false;
@@ -392,10 +398,7 @@ uint8_t AC_Fence::check()
                 printf("fence min alt............................\n");
             }
         }
-    } else {
-        printf("get_location failed\n");
     }
-
 
     // circle fence check
     if (check_fence_circle()) {

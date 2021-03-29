@@ -30,7 +30,7 @@
 
 // give up distance
 #define AC_FENCE_GIVE_UP_DISTANCE                   100.0f  // distance outside the fence at which we should give up and just land.  Note: this is not used by library directly but is intended to be used by the main code
-#define AC_FENCE_MANUAL_RECOVERY_TIME_MIN           10000   // pilot has 10seconds to recover during which time the autopilot will not attempt to re-take control
+#define AC_FENCE_MANUAL_RECOVERY_TIME_MIN           8000   // pilot has 8seconds to recover during which time the autopilot will not attempt to re-take control
 
 class AC_Fence
 {
@@ -161,7 +161,7 @@ private:
     float           _alt_max_backup;        // backup altitude upper limit in meters used to refire the breach if the vehicle continues to move further away
     float           _alt_min_backup;
     float           _circle_radius_backup;  // backup circle fence radius in meters used to refire the breach if the vehicle continues to move further away
-
+    uint8_t         _polygon_breached_backup = 0;
     // breach distances
     float           _alt_max_breach_distance;   // distance above the altitude max
     float           _circle_breach_distance;    // distance beyond the circular fence
