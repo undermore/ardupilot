@@ -404,9 +404,9 @@ public:
     AP_Int32        rtl_loiter_time;
     AP_Int16        land_speed;
     AP_Int16        land_speed_high;
-    AP_Int16        pilot_speed_up;    // maximum vertical ascending velocity the pilot may request
+    AP_Int16        pilot_speed_up_notused;    // maximum vertical ascending velocity the pilot may request
     AP_Int16        pilot_accel_z;               // vertical acceleration the pilot may request
-
+    AP_Int16        my_pilot_speed_up;
     // Throttle
     //
     AP_Int8         failsafe_throttle;
@@ -568,7 +568,8 @@ public:
 #endif
 
     // Additional pilot velocity items
-    AP_Int16    pilot_speed_dn;
+    AP_Int16    pilot_speed_dn_notused;
+    AP_Int16    my_pilot_speed_dn;
 
     // Land alt final stage
     AP_Int16 land_alt_low;

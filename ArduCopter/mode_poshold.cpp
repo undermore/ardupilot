@@ -78,7 +78,7 @@ bool Copter::ModePosHold::init(bool ignore_checks)
     }
     
     // initialize vertical speeds and acceleration
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
 
     // initialise position and desired velocity
@@ -132,7 +132,7 @@ void Copter::ModePosHold::run()
     const Vector3f& vel = inertial_nav.get_velocity();
 
     // initialize vertical speeds and acceleration
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
     loiter_nav->clear_pilot_desired_acceleration();
 
@@ -154,7 +154,7 @@ void Copter::ModePosHold::run()
 
         // get pilot desired climb rate (for alt-hold mode and take-off)
         target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->get_control_in());
-        target_climb_rate = constrain_float(target_climb_rate, -get_pilot_speed_dn(), g.pilot_speed_up);
+        target_climb_rate = constrain_float(target_climb_rate, -get_pilot_speed_dn(), g.my_pilot_speed_up);
 
         // get takeoff adjusted pilot and takeoff climb rates
         takeoff.get_climb_rates(target_climb_rate, takeoff_climb_rate);

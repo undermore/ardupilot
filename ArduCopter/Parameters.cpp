@@ -231,7 +231,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Range: 50 500
     // @Increment: 10
     // @User: Standard
-    GSCALAR(pilot_speed_up,     "PILOT_SPEED_UP",   PILOT_VELZ_MAX),
+    //GSCALAR(pilot_speed_up_notused,     "PILOT_SPEED_UP",   PILOT_VELZ_MAX),
 
     // @Param: PILOT_ACCEL_Z
     // @DisplayName: Pilot vertical acceleration
@@ -963,7 +963,7 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @Range: 50 500
     // @Increment: 10
     // @User: Standard
-    AP_GROUPINFO("PILOT_SPEED_DN", 24, ParametersG2, pilot_speed_dn, 0),
+    AP_GROUPINFO("PILOT_SPEED_DN", 24, ParametersG2, pilot_speed_dn_notused, 0),
 
     // @Param: LAND_ALT_LOW
     // @DisplayName: Land alt low

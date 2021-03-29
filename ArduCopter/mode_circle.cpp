@@ -15,7 +15,7 @@ bool Copter::ModeCircle::init(bool ignore_checks)
         // initialize speeds and accelerations
         pos_control->set_speed_xy(wp_nav->get_speed_xy());
         pos_control->set_accel_xy(wp_nav->get_wp_acceleration());
-        pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+        pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
         pos_control->set_accel_z(g.pilot_accel_z);
 
         // initialise circle controller including setting the circle center based on vehicle speed
@@ -37,7 +37,7 @@ void Copter::ModeCircle::run()
     // initialize speeds and accelerations
     pos_control->set_speed_xy(wp_nav->get_speed_xy());
     pos_control->set_accel_xy(wp_nav->get_wp_acceleration());
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
     
     // if not auto armed or motor interlock not enabled set throttle to zero and exit immediately

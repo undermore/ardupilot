@@ -21,7 +21,7 @@
 #define AC_FENCE_ACTION_ALWAYS_LAND                 2       // always land
 #define AC_FENCE_ACTION_BRAKE                       3
 // default boundaries
-#define AC_FENCE_ALT_MAX_DEFAULT                    9.0f  // default max altitude is 100m
+#define AC_FENCE_ALT_MAX_DEFAULT                    9.7f  // default max altitude is 100m
 #define AC_FENCE_ALT_MIN_DEFAULT                    2.0f  // default maximum depth in meters
 #define AC_FENCE_CIRCLE_RADIUS_DEFAULT              300.0f  // default circular fence radius is 300m
 #define AC_FENCE_ALT_MAX_BACKUP_DISTANCE            0.1f   // after fence is broken we recreate the fence 20m further up

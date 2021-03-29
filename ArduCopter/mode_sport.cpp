@@ -8,7 +8,7 @@
 bool Copter::ModeSport::init(bool ignore_checks)
 {
     // initialize vertical speed and acceleration
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
 
     // initialise position and desired velocity
@@ -28,7 +28,7 @@ void Copter::ModeSport::run()
     float takeoff_climb_rate = 0.0f;
 
     // initialize vertical speed and acceleration
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
 
     // apply SIMPLE mode transform
@@ -69,7 +69,7 @@ void Copter::ModeSport::run()
 
     // get pilot desired climb rate
     float target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->get_control_in());
-    target_climb_rate = constrain_float(target_climb_rate, -get_pilot_speed_dn(), g.pilot_speed_up);
+    target_climb_rate = constrain_float(target_climb_rate, -get_pilot_speed_dn(), g.my_pilot_speed_up);
 
     // State Machine Determination
     if (!motors->armed() || !motors->get_interlock()) {

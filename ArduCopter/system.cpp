@@ -300,6 +300,8 @@ void Copter::init_ardupilot()
     // flag that initialisation has completed
     ap.initialised = true;
     fence.enable(false);
+    g.my_pilot_speed_up.set(110);
+    g2.my_pilot_speed_dn.set(110);
 }
 
 

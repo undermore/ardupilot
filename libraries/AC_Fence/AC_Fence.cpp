@@ -201,7 +201,7 @@ bool AC_Fence::check_fence_alt_min()
                 )
         {
             record_breach(AC_FENCE_TYPE_ALT_MIN);
-            _alt_min_backup = _curr_alt;
+            _alt_min_backup = _curr_alt - 0.1f;
             return true;
         }
         return false;
@@ -293,8 +293,8 @@ bool AC_Fence::check_fence_polygon()
 
         _polygon_breach_distance = 1.0f;
         // check if this is a new breach
-        if (_polygon_breached_backup == 1
-                |
+        if ((_polygon_breached_backup == 1)
+                ||
             !(_breached_fences & AC_FENCE_TYPE_POLYGON))
         {
 
@@ -559,12 +559,13 @@ void AC_Fence::handle_msg(GCS_MAVLINK &link, mavlink_message_t* msg)
         case MAVLINK_MSG_ID_FENCE_POINT: {
             mavlink_fence_point_t packet;
             mavlink_msg_fence_point_decode(msg, &packet);
-            if (!check_latlng(packet.lat,packet.lng)) {
+            if (!(check_lat(packet.lat) && check_lng(packet.lng))) {
                 link.send_text(MAV_SEVERITY_WARNING, "Invalid fence point, lat or lng too large");
             } else {
                 Vector2l point;
-                point.x = packet.lat*1.0e7f;
-                point.y = packet.lng*1.0e7f;
+                double ex = 1.0e7;
+                point.x = packet.lat*ex;
+                point.y = packet.lng*ex;
                 if (!_poly_loader.save_point_to_eeprom(packet.idx, point)) {
                     link.send_text(MAV_SEVERITY_WARNING, "Failed to save polygon point, too many points?");
                 } else {
@@ -582,7 +583,8 @@ void AC_Fence::handle_msg(GCS_MAVLINK &link, mavlink_message_t* msg)
             // attempt to retrieve from eeprom
             Vector2l point;
             if (_poly_loader.load_point_from_eeprom(packet.idx, point)) {
-                mavlink_msg_fence_point_send_buf(msg, link.get_chan(), msg->sysid, msg->compid, packet.idx, _total, point.x*1.0e-7f, point.y*1.0e-7f);
+                double ex = 1.0e-7;
+                mavlink_msg_fence_point_send_buf(msg, link.get_chan(), msg->sysid, msg->compid, packet.idx, _total, point.x*ex, point.y*ex);
                 enable(true);
             } else {
                 link.send_text(MAV_SEVERITY_WARNING, "Bad fence point");

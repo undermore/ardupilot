@@ -181,7 +181,7 @@ bool Copter::ModeAutoTune::start(bool ignore_checks)
     }
 
     // initialize vertical speeds and leash lengths
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
 
     // initialise position and desired velocity
@@ -319,7 +319,7 @@ void Copter::ModeAutoTune::run()
     int16_t target_climb_rate;
 
     // initialize vertical speeds and acceleration
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
 
     // if not auto armed or motor interlock not enabled set throttle to zero and exit immediately

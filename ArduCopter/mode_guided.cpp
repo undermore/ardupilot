@@ -109,7 +109,7 @@ void Copter::ModeGuided::vel_control_start()
     pos_control->set_accel_xy(wp_nav->get_wp_acceleration());
 
     // initialize vertical speeds and acceleration
-    pos_control->set_speed_z(-get_pilot_speed_dn(), g.pilot_speed_up);
+    pos_control->set_speed_z(-get_pilot_speed_dn(), g.my_pilot_speed_up);
     pos_control->set_accel_z(g.pilot_accel_z);
 
     // initialise velocity controller
