@@ -299,6 +299,7 @@ void Copter::init_ardupilot()
 
     // flag that initialisation has completed
     ap.initialised = true;
+    fence.enable(false);
 }
 
 

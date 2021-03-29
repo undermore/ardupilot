@@ -87,7 +87,7 @@ void AC_Fence::enable(bool value)
 {
     _enabled = value;
     if (!value) {
-        clear_breach(AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON);
+        clear_breach(AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON);
     }
 }
 
@@ -182,6 +182,7 @@ bool AC_Fence::pre_arm_check(const char* &fail_msg) const
 
 bool AC_Fence::check_fence_alt_min()
 {
+    //printf("check_fence_alt_min\n");
     if (!(_enabled_fences & AC_FENCE_TYPE_ALT_MIN)) {
             return false;
     }
@@ -190,6 +191,9 @@ bool AC_Fence::check_fence_alt_min()
     _curr_alt = -_curr_alt;
 
     if(_curr_alt <= _my_alt_min) {
+
+        _alt_max_breach_distance = _my_alt_min - _curr_alt;
+
         if( !(_breached_fences & AC_FENCE_TYPE_ALT_MIN))
         {
             record_breach(AC_FENCE_TYPE_ALT_MIN);
@@ -200,6 +204,7 @@ bool AC_Fence::check_fence_alt_min()
 
     if ((_breached_fences & AC_FENCE_TYPE_ALT_MIN) != 0) {
         clear_breach(AC_FENCE_TYPE_ALT_MIN);
+        _alt_max_breach_distance = 0.0f;
     }
 
     return false;
@@ -279,19 +284,23 @@ bool AC_Fence::check_fence_polygon()
 
     position = position * 100.0f;  // m to cm
     if (_poly_loader.boundary_breached(position, _boundary_num_points, _boundary, true)) {
+
+        _polygon_breach_distance = 1.0f;
         // check if this is a new breach
-        if (_breached_fences & AC_FENCE_TYPE_POLYGON) {
-            // not a new breach
-            return false;
+        if (!(_breached_fences & AC_FENCE_TYPE_POLYGON)) {
+
+            // record that we have breached the polygon
+            record_breach(AC_FENCE_TYPE_POLYGON);
+            return true;
         }
-        // record that we have breached the polygon
-        record_breach(AC_FENCE_TYPE_POLYGON);
-        return true;
+        // not a new breach
+        return false;
     }
 
     // inside boundary; clear breach if present
     if (_breached_fences & AC_FENCE_TYPE_POLYGON) {
         clear_breach(AC_FENCE_TYPE_POLYGON);
+        _polygon_breach_distance = 0.0f;
     }
 
     return false;
@@ -351,9 +360,6 @@ uint8_t AC_Fence::check()
         return 0;
     }
 
-    if(_boundary_num_points <= 0)
-        return 0;
-
     // check if pilot is attempting to recover manually
     if (_manual_recovery_start_ms != 0) {
         // we ignore any fence breaches during the manual recovery period which is about 10 seconds
@@ -368,30 +374,34 @@ uint8_t AC_Fence::check()
     // maximum altitude fence check
     if (check_fence_alt_max()) {
         ret |= AC_FENCE_TYPE_ALT_MAX;
+        printf("fence max alt............................\n");
     }
 
     Location temp_loc;
     if (_ahrs.get_location(temp_loc)) {
-
-        float arround_home_cm = get_distance_cm(_ahrs.get_home(), temp_loc);
-
-        if(arround_home_cm > 120.0f)
+        uint32_t arround_home_cm = get_distance_cm(_ahrs.get_home(), temp_loc);
+        if(arround_home_cm * 0.01f > 1.2f)
         {
             if (check_fence_alt_min()) {
                 ret |= AC_FENCE_TYPE_ALT_MIN;
+                printf("fence min alt............................\n");
             }
         }
+    } else {
+        printf("get_location failed\n");
     }
 
 
     // circle fence check
     if (check_fence_circle()) {
         ret |= AC_FENCE_TYPE_CIRCLE;
+        printf("fence circle............................\n");
     }
 
     // polygon fence check
     if (check_fence_polygon()) {
         ret |= AC_FENCE_TYPE_POLYGON;
+        printf("fence polygon............................\n");
     }
 
     // return any new breaches that have occurred
@@ -401,7 +411,7 @@ uint8_t AC_Fence::check()
 // returns true if the destination is within fence (used to reject waypoints outside the fence)
 bool AC_Fence::check_destination_within_fence(const Location_Class& loc)
 {
-    if (get_enabled_fences()) {
+    if (get_enabled_fences() & AC_FENCE_TYPE_ALT_MIN) {
         int32_t alt_above_home_cm;
         if (loc.get_alt_cm(Location_Class::ALT_FRAME_ABOVE_HOME, alt_above_home_cm)) {
             if ((alt_above_home_cm * 0.01f) < _my_alt_min) {
@@ -477,13 +487,21 @@ float AC_Fence::get_breach_distance(uint8_t fence_type) const
 {
     switch (fence_type) {
         case AC_FENCE_TYPE_ALT_MAX:
+        case AC_FENCE_TYPE_ALT_MIN:
             return _alt_max_breach_distance;
             break;
         case AC_FENCE_TYPE_CIRCLE:
             return _circle_breach_distance;
             break;
+        case AC_FENCE_TYPE_POLYGON:
+            return _polygon_breach_distance;
+            break;
         case AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_CIRCLE:
+        case AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE:
             return MAX(_alt_max_breach_distance,_circle_breach_distance);
+        case AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_POLYGON:
+        case AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_POLYGON:
+            return MAX(_alt_max_breach_distance,_polygon_breach_distance);
     }
 
     // we don't recognise the fence type so just return 0
@@ -616,6 +634,15 @@ bool AC_Fence::load_polygon_from_eeprom(bool force_reload)
     // update validity of polygon
     _boundary_valid = _poly_loader.boundary_valid(_boundary_num_points, _boundary, true);
 
+    if(_boundary_valid)
+    {
+        printf("load boundary valid \n");
+    } else
+    {
+        printf("load boundary failed \n");
+    }
+
+
     return true;
 }
 
@@ -660,6 +687,13 @@ bool AC_Fence::sys_status_failed() const
             return true;
         }
     }
+
+    if (_enabled_fences & AC_FENCE_TYPE_ALT_MIN) {
+        if (_my_alt_min < 0.0f) {
+            return true;
+        }
+    }
+
     if ((_enabled_fences & AC_FENCE_TYPE_CIRCLE) ||
         (_enabled_fences & AC_FENCE_TYPE_POLYGON)) {
         Vector2f position;

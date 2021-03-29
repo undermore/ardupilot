@@ -164,6 +164,7 @@ private:
     // breach distances
     float           _alt_max_breach_distance;   // distance above the altitude max
     float           _circle_breach_distance;    // distance beyond the circular fence
+    float           _polygon_breach_distance;
 
     // other internal variables
     float           _home_distance;         // distance from home in meters (provided by main code)
