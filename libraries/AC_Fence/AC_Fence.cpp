@@ -194,9 +194,13 @@ bool AC_Fence::check_fence_alt_min()
 
         _alt_max_breach_distance = _my_alt_min - _curr_alt;
 
-        if( !(_breached_fences & AC_FENCE_TYPE_ALT_MIN))
+        if( !(_breached_fences & AC_FENCE_TYPE_ALT_MIN)
+                ||
+            (!is_zero(_alt_min_backup) && _curr_alt <= _alt_min_backup)
+                )
         {
             record_breach(AC_FENCE_TYPE_ALT_MIN);
+            _alt_min_backup = _curr_alt;
             return true;
         }
         return false;
@@ -205,6 +209,7 @@ bool AC_Fence::check_fence_alt_min()
     if ((_breached_fences & AC_FENCE_TYPE_ALT_MIN) != 0) {
         clear_breach(AC_FENCE_TYPE_ALT_MIN);
         _alt_max_breach_distance = 0.0f;
+        _alt_min_backup = 0.0f;
     }
 
     return false;
