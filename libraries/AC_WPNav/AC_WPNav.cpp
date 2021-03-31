@@ -31,7 +31,7 @@ const AP_Param::GroupInfo AC_WPNav::var_info[] = {
     // @Range: 10 1000
     // @Increment: 50
     // @User: Standard
-    AP_GROUPINFO("SPEED_UP",    2, AC_WPNav, _wp_speed_up_cms, 30.0f),//WPNAV_WP_SPEED_UP),
+    AP_GROUPINFO("SPEED_UP",    2, AC_WPNav, _wp_speed_up_cms_notused, 30.0f),//WPNAV_WP_SPEED_UP),
 
     // @Param: SPEED_DN
     // @DisplayName: Waypoint Descent Speed Target
@@ -95,6 +95,7 @@ AC_WPNav::AC_WPNav(const AP_InertialNav& inav, const AP_AHRS_View& ahrs, AC_PosC
     _wp_radius_cm = MAX(_wp_radius_cm, WPNAV_WP_RADIUS_MIN);
     _wp_speed_cms = 110;
     _wp_speed_down_cms = 30.0f;
+    _wp_speed_up_cms = 30.0f;
 }
 
 

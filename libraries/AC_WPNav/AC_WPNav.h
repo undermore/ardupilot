@@ -276,6 +276,7 @@ protected:
     AP_Float    _wp_speed_cms;
     AP_Float    _wp_speed_cms_notused;          // maximum horizontal speed in cm/s during missions
     AP_Float    _wp_speed_up_cms;       // climb speed target in cm/s
+    AP_Float    _wp_speed_up_cms_notused;
     AP_Float    _wp_speed_down_cms;
     AP_Float    _wp_speed_down_cms_notused;     // descent speed target in cm/s
     AP_Float    _wp_radius_cm;          // distance from a waypoint in cm that, when crossed, indicates the wp has been reached
