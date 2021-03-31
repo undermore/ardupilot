@@ -22,7 +22,7 @@ const AP_Param::GroupInfo AC_AttitudeControl::var_info[] = {
     // @Range: 500 18000
     // @Increment: 100
     // @User: Advanced
-    AP_GROUPINFO("SLEW_YAW",    2, AC_AttitudeControl, _slew_yaw, AC_ATTITUDE_CONTROL_SLEW_YAW_DEFAULT_CDS),
+    AP_GROUPINFO("SLEW_YAW",    2, AC_AttitudeControl, _slew_yaw_notused, AC_ATTITUDE_CONTROL_SLEW_YAW_DEFAULT_CDS),
 
     // 3 was for ACCEL_RP_MAX
 
