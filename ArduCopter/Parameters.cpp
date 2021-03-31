@@ -418,7 +418,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Units: s
     // @Range: 0 127
     // @User: Advanced
-    GSCALAR(disarm_delay, "DISARM_DELAY",           AUTO_DISARMING_DELAY),
+    //GSCALAR(disarm_delay_notused, "DISARM_DELAY",           AUTO_DISARMING_DELAY),
     
     // @Param: ANGLE_MAX
     // @DisplayName: Angle Max

@@ -302,6 +302,7 @@ void Copter::init_ardupilot()
     fence.enable(false);
     g.my_pilot_speed_up.set(110);
     g2.my_pilot_speed_dn.set(110);
+    g.disarm_delay.set(60);
 }
 
 
