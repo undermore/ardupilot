@@ -13,7 +13,7 @@ const AP_Param::GroupInfo AC_WPNav::var_info[] = {
     // @Range: 20 2000
     // @Increment: 50
     // @User: Standard
-    AP_GROUPINFO("SPEED",       0, AC_WPNav, _wp_speed_cms, WPNAV_WP_SPEED),
+    AP_GROUPINFO("SPEED",       0, AC_WPNav, _wp_speed_cms_notused, WPNAV_WP_SPEED),
 
     // @Param: RADIUS
     // @DisplayName: Waypoint Radius
@@ -93,6 +93,7 @@ AC_WPNav::AC_WPNav(const AP_InertialNav& inav, const AP_AHRS_View& ahrs, AC_PosC
     // sanity check some parameters
     _wp_accel_cmss = MIN(_wp_accel_cmss, GRAVITY_MSS * 100.0f * tanf(ToRad(_attitude_control.lean_angle_max() * 0.01f)));
     _wp_radius_cm = MAX(_wp_radius_cm, WPNAV_WP_RADIUS_MIN);
+    _wp_speed_cms = 110;
 }
 
 
