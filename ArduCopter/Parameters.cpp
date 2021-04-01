@@ -113,7 +113,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Range: 0 8000
     // @Increment: 1
     // @User: Standard
-    GSCALAR(rtl_altitude,   "RTL_ALT",     RTL_ALT),
+    //GSCALAR(rtl_altitude,   "RTL_ALT",     RTL_ALT),
 
     // @Param: RTL_CONE_SLOPE
     // @DisplayName: RTL cone slope
@@ -378,7 +378,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Description: Select which function is performed when CH8 is above 1800 pwm
     // @Values: 0:Do Nothing, 2:Flip, 3:Simple Mode, 4:RTL, 5:Save Trim, 7:Save WP, 9:Camera Trigger, 10:RangeFinder, 11:Fence, 13:Super Simple Mode, 14:Acro Trainer, 15:Sprayer, 16:Auto, 17:AutoTune, 18:Land, 19:Gripper, 21:Parachute Enable, 22:Parachute Release, 23:Parachute 3pos, 24:Auto Mission Reset, 25:AttCon Feed Forward, 26:AttCon Accel Limits, 27:Retract Mount, 28:Relay On/Off, 34:Relay2 On/Off, 35:Relay3 On/Off, 36:Relay4 On/Off, 29:Landing Gear, 30:Lost Copter Sound, 31:Motor Emergency Stop, 32:Motor Interlock, 33:Brake, 37:Throw, 38:ADSB-Avoidance, 39:PrecLoiter, 40:Object Avoidance, 41:ArmDisarm, 42:SmartRTL, 43:InvertedFlight, 44:Winch Enable, 45:WinchControl, 100: KillIMU1, 101: KillIMU2
     // @User: Standard
-    GSCALAR(ch8_option, "CH8_OPT",                  AUXSW_DO_NOTHING),
+    //GSCALAR(ch8_option, "CH8_OPT",                  AUXSW_DO_NOTHING),
 
     // @Param: CH9_OPT
     // @DisplayName: Channel 9 option

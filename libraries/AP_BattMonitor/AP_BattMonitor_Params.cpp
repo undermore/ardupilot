@@ -1,6 +1,6 @@
 #include <AP_Common/AP_Common.h>
 #include <AP_Vehicle/AP_Vehicle_Type.h>
-#include "AP_BattMonitor_Params.h"
+#include "AP_BattMonitor_Params .h"
 #include "AP_BattMonitor_Analog.h"
 
 #if APM_BUILD_TYPE(APM_BUILD_ArduCopter)
@@ -98,7 +98,7 @@ const AP_Param::GroupInfo AP_BattMonitor_Params::var_info[] = {
     // @Units: V
     // @Increment: 0.1
     // @User: Standard
-    AP_GROUPINFO("LOW_VOLT", 12, AP_BattMonitor_Params, _low_voltage, DEFAULT_LOW_BATTERY_VOLTAGE),
+    //AP_GROUPINFO("LOW_VOLT", 12, AP_BattMonitor_Params, _low_voltage, DEFAULT_LOW_BATTERY_VOLTAGE),
 
     // @Param: LOW_MAH
     // @DisplayName: Low battery capacity
@@ -133,7 +133,7 @@ const AP_Param::GroupInfo AP_BattMonitor_Params::var_info[] = {
     // @Values{Rover}: 0:None,1:RTL,2:Hold,3:SmartRTL,4:SmartRTL or Hold,5:Terminate
     // @Values{Tracker}: 0:None
     // @User: Standard
-    AP_GROUPINFO("FS_LOW_ACT", 16, AP_BattMonitor_Params, _failsafe_low_action, 2),
+    //AP_GROUPINFO("FS_LOW_ACT", 16, AP_BattMonitor_Params, _failsafe_low_action, 2),
 
     // @Param: FS_CRT_ACT
     // @DisplayName: Critical battery failsafe action
@@ -152,4 +152,6 @@ const AP_Param::GroupInfo AP_BattMonitor_Params::var_info[] = {
 
 AP_BattMonitor_Params::AP_BattMonitor_Params(void) {
     AP_Param::setup_object_defaults(this, var_info);
+    _low_voltage = 20;
+    _failsafe_low_action = 2;  //紧急停桨
 }
