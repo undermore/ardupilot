@@ -307,6 +307,7 @@ void Copter::init_ardupilot()
     g.land_speed_high.set(30);
     g.rtl_altitude.set(900);
     g.ch8_option.set(31);
+    aparm.angle_max.set(1800);
 }
 
 

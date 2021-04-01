@@ -1,6 +1,6 @@
 #include <AP_Common/AP_Common.h>
 #include <AP_Vehicle/AP_Vehicle_Type.h>
-#include "AP_BattMonitor_Params .h"
+#include "AP_BattMonitor_Params.h"
 #include "AP_BattMonitor_Analog.h"
 
 #if APM_BUILD_TYPE(APM_BUILD_ArduCopter)
@@ -153,5 +153,5 @@ const AP_Param::GroupInfo AP_BattMonitor_Params::var_info[] = {
 AP_BattMonitor_Params::AP_BattMonitor_Params(void) {
     AP_Param::setup_object_defaults(this, var_info);
     _low_voltage = 20;
-    _failsafe_low_action = 2;  //紧急停桨
+    _failsafe_low_action = 2;  //绱ф�ュ仠妗�
 }

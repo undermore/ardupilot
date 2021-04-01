@@ -426,7 +426,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Units: cdeg
     // @Range: 1000 8000
     // @User: Advanced
-    ASCALAR(angle_max, "ANGLE_MAX",                 DEFAULT_ANGLE_MAX),
+    //ASCALAR(angle_max, "ANGLE_MAX",                 DEFAULT_ANGLE_MAX),
 
     // @Param: PHLD_BRAKE_RATE
     // @DisplayName: PosHold braking rate
