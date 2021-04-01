@@ -573,6 +573,7 @@ public:
 
     // Land alt final stage
     AP_Int16 land_alt_low;
+    AP_Int16 land_alt_low_notused;
 
 #if TOY_MODE_ENABLED == ENABLED
     ToyMode toy_mode;
