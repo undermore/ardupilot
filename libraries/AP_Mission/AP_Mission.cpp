@@ -635,21 +635,22 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
 
     case MAV_CMD_NAV_LOITER_UNLIM:                      // MAV ID: 17
         copy_location = true;
-        cmd.p1 = fabsf(packet.param3);                  // store radius as 16bit since no other params are competing for space
-        cmd.content.location.flags.loiter_ccw = (packet.param3 < 0);    // -1 = counter clockwise, +1 = clockwise
+        cmd.p1 = (uint16_t)fabsf(packet.param3);                  // store radius as 16bit since no other params are competing for space
+        cmd.content.location.flags.loiter_ccw = packet.param3 > -0.00001f ? 0:1;
         break;
 
     case MAV_CMD_NAV_LOITER_TURNS:                      // MAV ID: 18
     {
+        float tmp = 10.0f;
         copy_location = true;
-        uint16_t num_turns = packet.param1*10;              // param 1 is number of times to circle is held in low p1
-        uint16_t radius_m = fabsf(packet.param3*10);        // param 3 is radius in meters is held in high p1
-        cmd.content.location.flags.unused1 = num_turns > 10;
-        cmd.content.location.flags.unused2 = packet.param1*100 > num_turns*10;
+        uint16_t num_turns = (uint16_t)fabsf(packet.param1*tmp);              // param 1 is number of times to circle is held in low p1
+        uint16_t radius_m = (uint16_t)fabsf(packet.param3*tmp);        // param 3 is radius in meters is held in high p1
+        cmd.content.location.flags.unused1 = num_turns > 10 ? 1:0;
+        cmd.content.location.flags.unused2 = ((uint16_t)(packet.param1*100.0f)) > num_turns*10 ? 1:0;
         num_turns /= 10;
-        cmd.p1 = (radius_m<<8) | (num_turns & 0x00FF);   // store radius in high byte of p1, num turns in low byte of p1
-        cmd.content.location.flags.loiter_ccw = (packet.param3 < 0);
-        cmd.content.location.flags.loiter_xtrack = (packet.param4 > 0); // 0 to xtrack from center of waypoint, 1 to xtrack from tangent exit location
+        cmd.p1 = ((radius_m<<8) | (num_turns & 0x00FF));   // store radius in high byte of p1, num turns in low byte of p1
+        cmd.content.location.flags.loiter_ccw = packet.param3 > -0.00001f ? 0:1;
+        cmd.content.location.flags.loiter_xtrack = 0;//(packet.param4 > -0.00001f) ? 1:0; // 0 to xtrack from center of waypoint, 1 to xtrack from tangent exit location
         cmd.content.yaw.turn_rate_dps = AUTO_SLOW_YAW_SLEW_RATE;
     }
         break;
@@ -1090,7 +1091,7 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         copy_location = true;
         packet.param3 = (float)cmd.p1;
         if (cmd.content.location.flags.loiter_ccw) {
-            packet.param3 *= -1;
+            packet.param3 *= -1.0f;
         }
         break;
 
@@ -1099,9 +1100,9 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         packet.param1 = LOWBYTE(cmd.p1);                // number of times to circle is held in low byte of p1
         packet.param3 = HIGHBYTE(cmd.p1);               // radius is held in high byte of p1
         if (cmd.content.location.flags.loiter_ccw) {
-            packet.param3 = -packet.param3;
+            packet.param3 *= -1.0f;
         }
-        packet.param3 /= 10;
+        packet.param3 /= 10.0f;
         packet.param4 = cmd.content.location.flags.loiter_xtrack; // 0 to xtrack from center of waypoint, 1 to xtrack from tangent exit location
         break;
 

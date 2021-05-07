@@ -288,7 +288,7 @@ void Copter::ModeAuto::circle_movetoedge_start(const Location_Class &circle_cent
         if (dist_to_center > copter.circle_nav->get_radius() && dist_to_center > 500) {
             auto_yaw.set_mode_to_default(false);
         } else {
-            if(yaw_mode)
+            if(yaw_mode==1)
                 auto_yaw.set_mode(AUTO_YAW_LOOK_AHEAD);
             else
                 // vehicle is within circle so hold yaw to avoid spinning as we move to edge of circle
@@ -1226,7 +1226,7 @@ void Copter::ModeAuto::do_circle(const AP_Mission::Mission_Command& cmd)
     // calculate radius
     uint8_t circle_radius_m = HIGHBYTE(cmd.p1); // circle radius held in high byte of p1
 
-    if(cmd.content.location.flags.loiter_ccw)
+    if(cmd.content.location.flags.loiter_ccw == 1)
         copter.circle_nav->set_rate(-1.0f * AC_CIRCLE_RATE_DEFAULT);
     else
         copter.circle_nav->set_rate(AC_CIRCLE_RATE_DEFAULT);
