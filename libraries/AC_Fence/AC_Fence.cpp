@@ -385,7 +385,7 @@ uint8_t AC_Fence::check()
     // maximum altitude fence check
     if (check_fence_alt_max()) {
         ret |= AC_FENCE_TYPE_ALT_MAX;
-        printf("fence max alt............................\n");
+        //printf("fence max alt............................\n");
     }
 
     Location temp_loc;
@@ -395,7 +395,7 @@ uint8_t AC_Fence::check()
         {
             if (check_fence_alt_min()) {
                 ret |= AC_FENCE_TYPE_ALT_MIN;
-                printf("fence min alt............................\n");
+                //printf("fence min alt............................\n");
             }
         }
     }
@@ -403,13 +403,13 @@ uint8_t AC_Fence::check()
     // circle fence check
     if (check_fence_circle()) {
         ret |= AC_FENCE_TYPE_CIRCLE;
-        printf("fence circle............................\n");
+        //printf("fence circle............................\n");
     }
 
     // polygon fence check
     if (check_fence_polygon()) {
         ret |= AC_FENCE_TYPE_POLYGON;
-        printf("fence polygon............................\n");
+        //printf("fence polygon............................\n");
     }
 
     // return any new breaches that have occurred

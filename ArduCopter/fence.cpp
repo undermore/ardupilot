@@ -38,7 +38,7 @@ void Copter::fence_check()
                 } else if (fence.get_breach_distance(new_breaches) <= AC_FENCE_GIVE_UP_DISTANCE) {
 
                     if (fence.get_action() == AC_FENCE_ACTION_BRAKE) {
-                        printf("BRAKE mode............................\n");
+                        //printf("BRAKE mode............................\n");
                         set_mode(BRAKE, MODE_REASON_FENCE_BREACH);
                     } else
                     {
