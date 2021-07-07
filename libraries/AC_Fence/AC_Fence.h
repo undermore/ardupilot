@@ -79,10 +79,10 @@ public:
     uint8_t get_action() const { return _action.get(); }
 
     /// get_safe_alt - returns maximum safe altitude (i.e. alt_max - margin)
-    float get_safe_alt_max() const { return 9.0f - _margin; } //_alt_max - _margin; }
+    float get_safe_alt_max() const { return _my_alt_max - _margin; } //_alt_max - _margin; }
 
     /// get_safe_alt_min - returns the minimum safe altitude (i.e. alt_min - margin)
-    float get_safe_alt_min() const { return 2.0f + _margin; }
+    float get_safe_alt_min() const { return _my_alt_min + _margin; }
 
     /// get_radius - returns the fence radius in meters
     float get_radius() const { return _circle_radius.get(); }
@@ -161,11 +161,11 @@ private:
     float           _alt_max_backup;        // backup altitude upper limit in meters used to refire the breach if the vehicle continues to move further away
     float           _alt_min_backup;
     float           _circle_radius_backup;  // backup circle fence radius in meters used to refire the breach if the vehicle continues to move further away
-    uint8_t         _polygon_breached_backup = 0;
+    //uint8_t         _polygon_breached_backup = 0;
     // breach distances
     float           _alt_max_breach_distance;   // distance above the altitude max
     float           _circle_breach_distance;    // distance beyond the circular fence
-    float           _polygon_breach_distance;
+    //float           _polygon_breach_distance;
 
     // other internal variables
     float           _home_distance;         // distance from home in meters (provided by main code)

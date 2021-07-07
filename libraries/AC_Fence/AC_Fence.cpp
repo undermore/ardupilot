@@ -77,10 +77,11 @@ AC_Fence::AC_Fence(const AP_AHRS_NavEKF& ahrs) :
     _ahrs(ahrs)
 {
     AP_Param::setup_object_defaults(this, var_info);
-    _my_alt_max = 9.0f;
+    _my_alt_max = 12.0f;
     _my_alt_min = 2.0f;
     _action = AC_FENCE_ACTION_BRAKE;
     _enabled_fences = (AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON);
+    _margin = 0.1f;
 }
 
 void AC_Fence::enable(bool value)
@@ -291,27 +292,28 @@ bool AC_Fence::check_fence_polygon()
     position = position * 100.0f;  // m to cm
     if (_poly_loader.boundary_breached(position, _boundary_num_points, _boundary, true)) {
 
-        _polygon_breach_distance = 1.0f;
+        //_polygon_breach_distance = 1.0f;
         // check if this is a new breach
-        if ((_polygon_breached_backup == 1)
-                ||
-            !(_breached_fences & AC_FENCE_TYPE_POLYGON))
+        //if ((_polygon_breached_backup == 1)
+        //        ||
+        if(_breached_fences & AC_FENCE_TYPE_POLYGON)
         {
 
-            _polygon_breached_backup = 1;
+            //_polygon_breached_backup = 1;
             // record that we have breached the polygon
-            record_breach(AC_FENCE_TYPE_POLYGON);
-            return true;
+            //record_breach(AC_FENCE_TYPE_POLYGON);
+            return false;
         }
         // not a new breach
-        return false;
+        record_breach(AC_FENCE_TYPE_POLYGON);
+        return true;
     }
 
     // inside boundary; clear breach if present
     if (_breached_fences & AC_FENCE_TYPE_POLYGON) {
         clear_breach(AC_FENCE_TYPE_POLYGON);
-        _polygon_breach_distance = 0.0f;
-        _polygon_breached_backup = 0;
+        //_polygon_breach_distance = 0.0f;
+        //_polygon_breached_backup = 0;
     }
 
     return false;
@@ -502,14 +504,14 @@ float AC_Fence::get_breach_distance(uint8_t fence_type) const
             return _circle_breach_distance;
             break;
         case AC_FENCE_TYPE_POLYGON:
-            return _polygon_breach_distance;
+            return 1.0f;//_polygon_breach_distance;
             break;
         case AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_CIRCLE:
         case AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_CIRCLE:
             return MAX(_alt_max_breach_distance,_circle_breach_distance);
         case AC_FENCE_TYPE_ALT_MAX | AC_FENCE_TYPE_POLYGON:
         case AC_FENCE_TYPE_ALT_MIN | AC_FENCE_TYPE_POLYGON:
-            return MAX(_alt_max_breach_distance,_polygon_breach_distance);
+            return MAX(_alt_max_breach_distance, 1.0f);//_polygon_breach_distance);
     }
 
     // we don't recognise the fence type so just return 0
